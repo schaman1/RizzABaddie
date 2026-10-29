@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://wtr0g2tutq1y"]
+
+[ext_resource type="Script" uid="uid://dwadunecwbmom" path="res://scripts/Main.cs" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dk35qakk7ydjc" path="res://scenes/host_scene.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://111spanvvjbq" path="res://scenes/client_scene.tscn" id="3_sugp2"]
+
+[node name="Main" type="Node2D" unique_id=1593171990 node_paths=PackedStringArray("LineEditPseudo", "LineEditCode", "ButtonHost", "ButtonJoin", "InfoLabel")]
+script = ExtResource("1_o5qli")
+HostScene = ExtResource("2_0wfyh")
+ClientScene = ExtResource("3_sugp2")
+LineEditPseudo = NodePath("CanvasLayer/LineEditName")
+LineEditCode = NodePath("CanvasLayer/LineEditCode")
+ButtonHost = NodePath("CanvasLayer/VBoxContainer/Host")
+ButtonJoin = NodePath("CanvasLayer/VBoxContainer/Join")
+InfoLabel = NodePath("CanvasLayer/VBoxContainer/InfoLabel")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1191790588]
+
+[node name="LineEditCode" type="LineEdit" parent="CanvasLayer" unique_id=450237829]
+offset_left = 424.0
+offset_top = 59.0
+offset_right = 577.0
+offset_bottom = 112.0
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Join Code"
+expand_to_text_length = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1455882646]
+offset_right = 400.0
+offset_bottom = 207.0
+
+[node name="Host" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=1835857394]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = " Host "
+
+[node name="Join" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=344539164]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Join"
+
+[node name="InfoLabel" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=943810847]
+custom_maximum_size = Vector2(400, 150)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Infos : u need steam open !"
+autowrap_mode = 2
+
+[node name="LineEditName" type="LineEdit" parent="CanvasLayer" unique_id=1901618376]
+custom_minimum_size = Vector2(300, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -21.0
+offset_right = 50.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Pseudo"
+alignment = 1
+max_length = 15
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Join" to="." method="_on_join_pressed"]

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://111spanvvjbq"]
+
+[ext_resource type="Script" uid="uid://1ix1r6hqn37u" path="res://scripts/ClientScene.cs" id="1_glta0"]
+
+[node name="ClientScene" type="Node2D" unique_id=241481342 node_paths=PackedStringArray("LabelPseudo")]
+script = ExtResource("1_glta0")
+LabelPseudo = NodePath("CanvasLayer/VBoxContainer/LabelPseudo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=755988014]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1926840863]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -231.5
+offset_top = -22.5
+offset_right = 231.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 100
+
+[node name="LabelPseudo" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=1695814941]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Pseudo"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=426647739]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Waiting for host to start game"

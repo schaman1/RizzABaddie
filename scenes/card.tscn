@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://d2yxt2i8n1nqc"]
+
+[node name="Control" type="Control" unique_id=1957760092]
+custom_maximum_size = Vector2(100, 150)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1052.0
+offset_bottom = -498.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=771551761]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1071853563]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer" unique_id=847330669]
+layout_mode = 2
+color = Color(0.2520276, 0.25202766, 0.25202763, 1)
+
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1150096169]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "CardName"
+horizontal_alignment = 1
+vertical_alignment = 2

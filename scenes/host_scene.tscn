@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://dk35qakk7ydjc"]
+
+[ext_resource type="Script" uid="uid://ckhum4m4r8b14" path="res://scripts/HostScene.cs" id="1_2a0kp"]
+[ext_resource type="PackedScene" uid="uid://rsa37liy57gg" path="res://scenes/pseudo_label.tscn" id="2_rq4jg"]
+
+[node name="HostScene" type="Node2D" unique_id=1798897752 node_paths=PackedStringArray("LabelJoinCode", "LabelInfo", "ButtonStartGame", "PseudoContainer", "LabelPseudo")]
+script = ExtResource("1_2a0kp")
+LabelJoinCode = NodePath("CanvasLayer/VBoxContainer/LabelCode")
+LabelInfo = NodePath("CanvasLayer/VBoxContainer/LabelInfo")
+ButtonStartGame = NodePath("CanvasLayer/VBoxContainer/StartGame")
+LabelPackedScene = ExtResource("2_rq4jg")
+PseudoContainer = NodePath("CanvasLayer/VBoxContainer2")
+LabelPseudo = NodePath("CanvasLayer/VBoxContainer/MarginContainer/LabelPseudo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1663590515]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=212971]
+custom_minimum_size = Vector2(350, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -91.0
+offset_top = -40.0
+offset_right = 91.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer" unique_id=958878932]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 50
+
+[node name="LabelPseudo" type="Label" parent="CanvasLayer/VBoxContainer/MarginContainer" unique_id=2078149533]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Pseudo"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelCode" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=708438283]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Join Code :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartGame" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=602162860]
+custom_maximum_size = Vector2(200, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 32
+text = "Start Game"
+
+[node name="LabelInfo" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=1506733750]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7670247, 2.5268644e-06, 9.62615e-07, 1)
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer" unique_id=1147979418]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer2" unique_id=1592921787]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Players : "
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]

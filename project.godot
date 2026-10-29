@@ -1,0 +1,43 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="OneMore"
+run/main_scene="uid://wtr0g2tutq1y"
+config/features=PackedStringArray("4.7", "C#", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Networking="*uid://07dt0e5ryuf5"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[dotnet]
+
+project/assembly_name="OneMore"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="mobile"
+
+[steam]
+
+initialization/app_data/app_id=480
+initialization/processes/initialize_on_startup=true

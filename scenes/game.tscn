@@ -1,0 +1,432 @@
+[gd_scene format=3 uid="uid://by7rugmnx33h6"]
+
+[ext_resource type="Script" uid="uid://dyabicf6hykn3" path="res://scripts/Game.cs" id="1_lnu2h"]
+[ext_resource type="Texture2D" uid="uid://bger5wwac5wur" path="res://assets/Losange.png" id="2_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="3_lnu2h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
+bg_color = Color(1, 0.35686275, 0.35686275, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="Animation" id="Animation_lnu2h"]
+resource_name = "Choose"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../ButtonDraw:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../ButtonDraw:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../WhatChose:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_lbhrr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../ButtonDraw:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../ButtonDraw:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../WhatChose:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_iywne"]
+resource_name = "Reset"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../ButtonDraw:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../../ButtonDraw:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../WhatChose:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lbhrr"]
+_data = {
+&"Choose": SubResource("Animation_lnu2h"),
+&"RESET": SubResource("Animation_lbhrr"),
+&"Reset": SubResource("Animation_iywne")
+}
+
+[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar")]
+script = ExtResource("1_lnu2h")
+ButtonQuit = NodePath("CanvasLayer/MarginContainer/ButtonQuit/TextureButton")
+ButtonDraw = NodePath("CanvasLayer/MarginContainer/ButtonDraw/TextureButton")
+Animation = NodePath("AnimationPlayer")
+LabelActionChoose = NodePath("CanvasLayer/MarginContainer/WhatChose/LabelActionChoose")
+LabelDeck = NodePath("CanvasLayer/Deck/LabelDeck")
+PlayerContainer = NodePath("CanvasLayer/Players")
+PlayerPackedScene = ExtResource("3_lnu2h")
+MyPlayer = NodePath("CanvasLayer/MarginContainer/PlayerContainer")
+TimerShowActions = NodePath("TimerShowCards")
+ProbaDieProgressBar = NodePath("CanvasLayer/ProgressBar")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1667825297]
+
+[node name="Deck" type="ColorRect" parent="CanvasLayer" unique_id=1105697441]
+custom_minimum_size = Vector2(100, 150)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -75.0
+offset_right = 50.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.6392157, 0.24313726, 0.5686275, 1)
+
+[node name="LabelDeck" type="Label" parent="CanvasLayer/Deck" unique_id=681250412]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "Deck"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="CanvasLayer" unique_id=1917402674]
+custom_minimum_size = Vector2(0, 150)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Players" type="HBoxContainer" parent="CanvasLayer" unique_id=586711297]
+custom_minimum_size = Vector2(0, 100)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1014659603]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 300
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 300
+theme_override_constants/margin_bottom = 150
+
+[node name="PlayerContainer" parent="CanvasLayer/MarginContainer" unique_id=2042746711 instance=ExtResource("3_lnu2h")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="WhatChose" type="Control" parent="CanvasLayer/MarginContainer" unique_id=1409862653]
+visible = false
+custom_minimum_size = Vector2(150, 100)
+custom_maximum_size = Vector2(150, 100)
+propagate_maximum_size = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="LabelActionChoose" type="Label" parent="CanvasLayer/MarginContainer/WhatChose" unique_id=696741496]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Draw"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureRect" parent="CanvasLayer/MarginContainer/WhatChose" unique_id=923834818]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 151.0
+offset_bottom = 99.0
+texture = ExtResource("2_lbhrr")
+
+[node name="ButtonDraw" type="Control" parent="CanvasLayer/MarginContainer" unique_id=1883296518]
+custom_minimum_size = Vector2(150, 100)
+custom_maximum_size = Vector2(150, 100)
+propagate_maximum_size = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/ButtonDraw" unique_id=2053732966]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Draw"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/MarginContainer/ButtonDraw" unique_id=1061730711]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 151.0
+offset_bottom = 99.0
+texture_normal = ExtResource("2_lbhrr")
+texture_pressed = ExtResource("2_lbhrr")
+texture_hover = ExtResource("2_lbhrr")
+texture_disabled = ExtResource("2_lbhrr")
+texture_focused = ExtResource("2_lbhrr")
+stretch_mode = 0
+
+[node name="ButtonQuit" type="Control" parent="CanvasLayer/MarginContainer" unique_id=1877687592]
+custom_minimum_size = Vector2(150, 100)
+custom_maximum_size = Vector2(150, 100)
+propagate_maximum_size = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/ButtonQuit" unique_id=1895307441]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Quit"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/MarginContainer/ButtonQuit" unique_id=1194185824]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 151.0
+offset_bottom = 99.0
+texture_normal = ExtResource("2_lbhrr")
+texture_pressed = ExtResource("2_lbhrr")
+texture_hover = ExtResource("2_lbhrr")
+texture_disabled = ExtResource("2_lbhrr")
+texture_focused = ExtResource("2_lbhrr")
+stretch_mode = 0
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=1744335086]
+custom_minimum_size = Vector2(30, 0)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -199.0
+offset_bottom = 199.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.9490196, 0, 0.1254902, 1)
+theme_override_styles/fill = SubResource("StyleBoxFlat_lnu2h")
+value = 50.0
+fill_mode = 3
+show_percentage = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1831674433]
+root_node = NodePath("../CanvasLayer/MarginContainer/ButtonQuit/Label")
+libraries/ = SubResource("AnimationLibrary_lbhrr")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1582407174]
+spawn_path = NodePath("..")
+
+[node name="PositionPlayerChoose" type="Marker2D" parent="." unique_id=437524980]
+position = Vector2(576, 100)
+
+[node name="TimerShowCards" type="Timer" parent="." unique_id=1781158152]
+wait_time = 2.0

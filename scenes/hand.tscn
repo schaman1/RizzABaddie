@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://gi32v0ym2crt"]
+
+[node name="Control" type="Control" unique_id=1492343553]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=676489558]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

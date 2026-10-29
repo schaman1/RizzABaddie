@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://d3fheplo2jc8i"]
+
+[ext_resource type="Script" uid="uid://crdgvtyyqnx6p" path="res://scripts/PlayerContainer.cs" id="1_r7lr4"]
+[ext_resource type="Shader" uid="uid://drvx5yx8snt2b" path="res://shader/round.gdshader" id="2_a7xq8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7lr4"]
+shader = ExtResource("2_a7xq8")
+
+[node name="PlayerContainer" type="MarginContainer" unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "LabelPower", "BorderColorRect", "HasPlayedColorRect")]
+propagate_maximum_size = false
+offset_right = 100.0
+offset_bottom = 47.0
+script = ExtResource("1_r7lr4")
+LabelName = NodePath("MarginContainer/VBoxContainer/Name")
+LabelLove = NodePath("MarginContainer/VBoxContainer/Love")
+LabelPower = NodePath("MarginContainer/VBoxContainer/Power")
+ColorActive = Color(0, 0.6862745, 0.6862745, 1)
+ColorPassive = Color(0, 0.3019608, 0.3019608, 1)
+BorderColorRect = NodePath("ColorRectBorder")
+HasPlayedColorRect = NodePath("MarginContainer/ColorRectHasPlay")
+
+[node name="ColorRectBorder" type="ColorRect" parent="." unique_id=1961244725]
+layout_mode = 2
+color = Color(0, 0.6862745, 0.6862745, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1054202066]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer" unique_id=1218991659]
+layout_mode = 2
+color = Color(0, 0.30086526, 0.30086514, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1833042064]
+custom_minimum_size = Vector2(200, 0)
+propagate_maximum_size = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1819496330]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Player1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Love" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1204894259]
+layout_mode = 2
+text = "Love : 0"
+
+[node name="Power" type="Label" parent="MarginContainer/VBoxContainer" unique_id=247068764]
+layout_mode = 2
+text = "Power : 0"
+
+[node name="ColorRectHasPlay" type="ColorRect" parent="MarginContainer" unique_id=1150423380]
+material = SubResource("ShaderMaterial_r7lr4")
+custom_maximum_size = Vector2(30, 30)
+layout_mode = 2
+color = Color(0.21960784, 1, 0.23921569, 1)
