@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://do368oih3yt64"]
+
+[ext_resource type="Script" uid="uid://b4ebscei40psx" path="res://scripts/Week.cs" id="1_35v4v"]
+[ext_resource type="FontFile" uid="uid://dxj12avck06ci" path="res://font/BILLO___.TTF" id="1_ba17h"]
+
+[node name="Week" type="VBoxContainer" unique_id=883889003]
+custom_minimum_size = Vector2(150, 0)
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 160.0
+grow_vertical = 2
+alignment = 1
+script = ExtResource("1_35v4v")
+ColorHidden = Color(0.49747366, 0.49747366, 0.49747366, 0.49803922)
+ColorVisible = Color(1, 1, 1, 1)
+
+[node name="LabelMonday" type="Label" parent="." unique_id=396535927]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "MONDAY"
+
+[node name="LabelTuesday" type="Label" parent="." unique_id=1849381822]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "TUESDAY"
+
+[node name="LabelWednesday" type="Label" parent="." unique_id=750154001]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "WEDNESDAY"
+
+[node name="LabelThursday" type="Label" parent="." unique_id=1322477909]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "THURSDAY"
+
+[node name="LabelFriday" type="Label" parent="." unique_id=1117123552]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "FRIDAY"
+
+[node name="LabelSatudray" type="Label" parent="." unique_id=859763019]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "SATURDAY"
+
+[node name="LabelSunday" type="Label" parent="." unique_id=2001993747]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("1_ba17h")
+theme_override_font_sizes/font_size = 32
+text = "SUNDAY"

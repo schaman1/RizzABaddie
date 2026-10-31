@@ -44,7 +44,6 @@ public partial class Networking : Node
 	public PlayersInfoClass PlayersInfo { get; private set; } = new PlayersInfoClass();
 	public string Pseudo { get; set; } = "Pseudo";
 	public int IdxBomb { get; private set; } = 0;
-	public int NbrCards { get; set; } = 6; //Need something to set it by itself
 	RandomNumberGenerator Rdm = new RandomNumberGenerator();
 
 	//Static !important
@@ -351,8 +350,8 @@ public partial class Networking : Node
 	}
 	public void SetIdxBomb()
 	{
-		IdxBomb = Rdm.RandiRange(0,NbrCards-1);
-		//IdxBomb = 0;//ToModifie
+		int NbrOfCards = PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyDeck.GetNbrOfCardsTot();
+		IdxBomb = Rdm.RandiRange(0,NbrOfCards-1);
 	}
 
 	public async Task RequestPlayersInfo()

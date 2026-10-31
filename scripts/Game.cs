@@ -30,12 +30,14 @@ public partial class Game : Node2D
 	[Export] PlayerContainer MyPlayer;
 	[Export] Timer TimerShowActions;
 	[Export] ProgressBar ProbaDieProgressBar;
+	[Export]Week WeekBoxContainer;
 
 	private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
 	private PlayerContainer CurrentActivePlayerContainer = null;
 	public PlayersInfoClass players_dico;
 	int idx_player_display = 0;
 	int LastPlayerIdxAdded = 0;
+	int IdxOfManche = -1; //-1 car start manche = set to 0;
 
 	enum State {ChooseAction,WaitForOther,Reveal,RevealEndManche};
 	State CurrentState = State.ChooseAction;
@@ -72,6 +74,7 @@ public partial class Game : Node2D
 
 	private async void StartManche()
 	{
+		IdxOfManche+=1;
 		//Reset
 		//ShowActionPlayerContainer.Visible = false;
 		CurrentState = State.ChooseAction;
@@ -79,6 +82,7 @@ public partial class Game : Node2D
 		ActionChoose = Actions.Nothing;
 		UpdatePlayers();
 		ProbaDieProgressBar.Value = 16;
+		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
 	}
 
 	private async void MancheFinish() //Not good az don't throw the signal at the end

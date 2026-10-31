@@ -23,7 +23,7 @@ public partial class Deck : Node
 	{
 	}
 
-	public void InitDeck() //Not beautifull but i did it myself suuh
+	public void InitDeck() //Not beautifull but i did it myself suuh !!!
 	{	
 		String FilePath = "data/data_card_start.json";
 		var dataFile = FileAccess.Open(FilePath, FileAccess.ModeFlags.Read);
@@ -41,6 +41,16 @@ public partial class Deck : Node
 				Cards.Add(NewCard);
 			}
 		}
+	}
+
+	public int CountRemainingCards()
+	{
+		return RemainingCards.Count;
+	}
+
+	public int GetNbrOfCardsTot()
+	{
+		return Cards.Count;
 	}
 
 	/*public void InitDeck2()
