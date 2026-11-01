@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://honuf4m727sh"]
+
+[ext_resource type="FontFile" uid="uid://drp4uw0wwusgj" path="res://font/Fat Kat.ttf" id="1_cp6s8"]
+[ext_resource type="Script" uid="uid://cnhcqtelve8if" path="res://scripts/ColorRectEndGame.cs" id="1_n2ek1"]
+[ext_resource type="PackedScene" uid="uid://dk35qakk7ydjc" path="res://scenes/host_scene.tscn" id="2_2mvqi"]
+[ext_resource type="PackedScene" uid="uid://111spanvvjbq" path="res://scenes/client_scene.tscn" id="3_o7xvr"]
+[ext_resource type="PackedScene" uid="uid://wtr0g2tutq1y" path="res://scenes/main.tscn" id="4_yvdqy"]
+
+[node name="ColorRectEndGame" type="ColorRect" unique_id=1390121789 node_paths=PackedStringArray("LabelWinLose", "ButtonQuit", "ButtonRestart")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.7737603, 0.76807696, 0.49803922)
+script = ExtResource("1_n2ek1")
+LabelWinLose = NodePath("Label")
+ButtonQuit = NodePath("MarginContainer/HBoxContainer/ButtonQuit")
+ButtonRestart = NodePath("MarginContainer/HBoxContainer/ButtonRestart")
+HostScene = ExtResource("2_2mvqi")
+ClientScene = ExtResource("3_o7xvr")
+MainScene = ExtResource("4_yvdqy")
+
+[node name="Label" type="Label" parent="." unique_id=1017670363]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_cp6s8")
+theme_override_font_sizes/font_size = 128
+text = "WIN / LOOSE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=741195857]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_bottom = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=460302904]
+custom_maximum_size = Vector2(-1, 100)
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
+
+[node name="ButtonRestart" type="Button" parent="MarginContainer/HBoxContainer" unique_id=940660020]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_fonts/font = ExtResource("1_cp6s8")
+theme_override_font_sizes/font_size = 64
+text = "RESTART"
+
+[node name="ButtonQuit" type="Button" parent="MarginContainer/HBoxContainer" unique_id=2042936363]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = ExtResource("1_cp6s8")
+theme_override_font_sizes/font_size = 64
+text = "QUIT"

@@ -24,6 +24,7 @@ public partial class PlayersInfoClass : Node
 {
     
     public Dictionary<long,Player> PlayerDic = new Dictionary<long,Player>();
+    public List<Player> Winners = new List<Player>();
     private int DefaultLove = 0;
 
     public Player GetPlayer(int Id)
@@ -145,17 +146,6 @@ public partial class PlayersInfoClass : Node
             player.ResetAction();
 
             player.Love += player.CardPower; //
-
-            //if(player.CardIdDraw == 0) //Don't do it as it gives u love to the baddie
-            //{
-            //}
-            //else
-            //{
-            //    foreach(Player other_player in PlayerDic.Values)
-            //    {
-            //        other_player.Love -= player.CardPower; //Deals damage to all other peer
-            //    }
-            //}
         }
     }
 
@@ -184,6 +174,26 @@ public partial class PlayersInfoClass : Node
         return true;
     }
 
+    public void SetWinner()
+    {
+        int max = PlayerDic[1].Love;
+        foreach(Player player in PlayerDic.Values)
+        {
+            if (player.Love >= max)
+            {
+                if (player.Love == max)
+                {
+                    Winners.Add(player);
+                }
+                else
+                {
+                    Winners.Clear();
+                    Winners.Add(player);
+                }
+                max = player.Love;
+            }
+        }
+    }
 }
 
 public partial class Player: Node
@@ -197,7 +207,6 @@ public partial class Player: Node
     public int CardPower = 0;
     public bool ReceivedAction = false;
     public State CurrentState = State.InManche;
-
     public Deck MyDeck = new Deck();
 
     public Player(long _id,string _name,int _Love, int _power, int _action)
@@ -244,5 +253,10 @@ public partial class Player: Node
     public void EndManche()
     {
         //Put all in startManche good ? Idk
+    }
+
+    public void Restart() //Call at each begin of game
+    {
+        MyDeck.Restart();
     }
 }

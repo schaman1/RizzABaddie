@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dyabicf6hykn3" path="res://scripts/Game.cs" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://bger5wwac5wur" path="res://assets/Losange.png" id="2_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://ddc0ra33rwdc8" path="res://scenes/add_value.tscn" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://do368oih3yt64" path="res://scenes/week.tscn" id="3_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://honuf4m727sh" path="res://scenes/color_rect_end_game.tscn" id="5_p57ef"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
 bg_color = Color(1, 0.35686275, 0.35686275, 1)
@@ -206,7 +208,7 @@ _data = {
 &"Reset": SubResource("Animation_iywne")
 }
 
-[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer")]
+[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "NodeEndGame")]
 script = ExtResource("1_lnu2h")
 ButtonQuit = NodePath("CanvasLayer/MarginContainerCenter/ButtonQuit/TextureButton")
 ButtonDraw = NodePath("CanvasLayer/MarginContainerCenter/ButtonDraw/TextureButton")
@@ -219,6 +221,8 @@ MyPlayer = NodePath("CanvasLayer/MarginContainerCenter/PlayerContainer")
 TimerShowActions = NodePath("TimerShowCards")
 ProbaDieProgressBar = NodePath("CanvasLayer/MarginContainerBorder/ProgressBar")
 WeekBoxContainer = NodePath("CanvasLayer/MarginContainerBorder/Week")
+NodeEndGame = NodePath("CanvasLayer/ColorRectEndGame")
+AddValuePackedScene = ExtResource("3_iywne")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1667825297]
 
@@ -418,6 +422,10 @@ theme_override_font_sizes/font_size = 32
 text = "Deck"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ColorRectEndGame" parent="CanvasLayer" unique_id=1390121789 instance=ExtResource("5_p57ef")]
+visible = false
+z_index = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1831674433]
 root_node = NodePath("../CanvasLayer/MarginContainerCenter/ButtonQuit/Label")

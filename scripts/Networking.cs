@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 public partial class Networking : Node
 {
 	// Called when the node enters the scene tree for the first time.
+	[Signal] public delegate void EndGameEventHandler(bool HasWin);
 	[Signal] public delegate void HostCreatedEventHandler();
 	[Signal] public delegate void CodeNotFoundEventHandler();
 	[Signal] public delegate void ConnectionSuccessEventHandler();
@@ -18,8 +19,11 @@ public partial class Networking : Node
 	[Signal] public delegate void PlayersChangedEventHandler();
 	[Signal] public delegate void PlayersInitiatedEventHandler(); //When want to get existing players
 	[Signal] public delegate void PeerPlayEventHandler(int PeerId); //When want to get existing players
+	[Signal] public delegate void ProbaToSetEventHandler(float proba); //When want to get existing players
 
 	public string GameScene = "res://scenes/game.tscn";
+	private int CurrentManche = 0;
+	private int NbrMaxManchePerGame = 7;
 
 	//State
 	public string JoinCode = "00000";
@@ -285,6 +289,11 @@ public partial class Networking : Node
 	{
 		EmitSignal(SignalName.MancheFinishShopStart);
 	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void EmitEndGame(bool HasWin)
+	{
+		EmitSignal(SignalName.EndGame,HasWin);
+	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void FinishDisplayAll(long PeerId)
@@ -292,8 +301,31 @@ public partial class Networking : Node
 		PlayersInfo.SetPlayerFInishDisplay(PeerId);
 		if (PlayersInfo.HasAllPeerFinishManche())
 		{
-			StartManche(); //As everyone finish display macneh, start new one
+			if (CurrentManche == NbrMaxManchePerGame)
+			{
+				PlayersInfo.SetWinner();
+				foreach(Player player in PlayersInfo.PlayerDic.Values)
+				{
+					RpcId(player.Id,nameof(EmitEndGame),PlayersInfo.Winners.Contains(player));
+				}
+			}
+			else
+			{
+				StartManche(); //As everyone finish display manche, start new one
+			}
 		}
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void GetDiePourcentage(int PeerId)
+	{
+		float proba = PlayersInfo.PlayerDic[PeerId].MyDeck.GetProbaBomb();
+		RpcId(PeerId,nameof(SetDiePourcentage),proba);
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void SetDiePourcentage(float proba)
+	{
+		EmitSignal(SignalName.ProbaToSet,proba);
 	}
 	//Utils
 	private String ReturnUniquePseudo(String Pseudo)
@@ -323,6 +355,10 @@ public partial class Networking : Node
 	//Game fct
 	public void StartGame()
 	{
+		foreach(Player player in PlayersInfo.PlayerDic.Values)
+		{
+			player.Restart();
+		}
 		StartManche(false); //D'ont emit. Why ? Bcs player haven't time to connect things as load take time so needs to wait but difficult = let them initialise for the 1st time
 		Rpc(nameof(LoadSceneGame));
 		//StartManche(); //For the 1st time, players do it themself
@@ -330,6 +366,7 @@ public partial class Networking : Node
 	public void StartManche(bool HasToEmit = true)
 	{
 		GD.Print("Start Manche");
+		CurrentManche+=1;
 
 		SetIdxBomb();
 		foreach(Player player in PlayersInfo.PlayerDic.Values)

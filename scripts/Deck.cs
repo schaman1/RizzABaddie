@@ -43,9 +43,10 @@ public partial class Deck : Node
 		}
 	}
 
-	public int CountRemainingCards()
+	public float GetProbaBomb()
 	{
-		return RemainingCards.Count;
+		//GD.Print("Probqa : ",(RemainingCards.Count-1)*100/Cards.Count);
+		return 100 - (RemainingCards.Count-1)*100/Cards.Count;//% out of 100
 	}
 
 	public int GetNbrOfCardsTot()
@@ -104,6 +105,12 @@ public partial class Deck : Node
 		RemainingCards.RemoveAt(pos);
 
 		return card;
+	}
+
+	public void Restart()
+	{
+		Cards.Clear();
+		InitDeck();
 	}
 
 }

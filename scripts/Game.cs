@@ -31,6 +31,9 @@ public partial class Game : Node2D
 	[Export] Timer TimerShowActions;
 	[Export] ProgressBar ProbaDieProgressBar;
 	[Export]Week WeekBoxContainer;
+	[Export] ColorRectEndGame NodeEndGame;
+
+	[Export]private PackedScene AddValuePackedScene;
 
 	private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
 	private PlayerContainer CurrentActivePlayerContainer = null;
@@ -62,6 +65,8 @@ public partial class Game : Node2D
 		Networking.Instance.MancheFinishShopStart += MancheFinish;
 		Networking.Instance.MancheStart += StartManche;
 		Networking.Instance.PeerPlay += PeerPlay; //Idk how to do it
+		Networking.Instance.ProbaToSet += SetProbaDie;
+		Networking.Instance.EndGame += EndGame;
 		
 		InitPlayers();
 		StartManche(); //Networking don't call it for the 1st time (bcs pbl et doit await mais dur)
@@ -75,14 +80,12 @@ public partial class Game : Node2D
 	private async void StartManche()
 	{
 		IdxOfManche+=1;
-		//Reset
-		//ShowActionPlayerContainer.Visible = false;
 		CurrentState = State.ChooseAction;
 		Animation.Play("Reset");
 		ActionChoose = Actions.Nothing;
 		UpdatePlayers();
-		ProbaDieProgressBar.Value = 16;
 		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
+		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
 	}
 
 	private async void MancheFinish() //Not good az don't throw the signal at the end
@@ -240,6 +243,16 @@ public partial class Game : Node2D
 		{
 			LabelDeck.Text = "Draw\n" +PlayerInfo.CardPower.ToString();
 			CurrentActivePlayerContainer.SetNewLove(-PlayerInfo.CardPower); // - bcs bomb deals damage, no heal
+			AddValue Add = (AddValue)AddValuePackedScene.Instantiate();
+			if(PlayerInfo.Id != MyId)
+			{	
+				players[PlayerInfo.Id].AddChild(Add);
+			}
+			else
+			{
+				MyPlayer.AddChild(Add);
+			}
+			Add.Init(PlayerInfo.CardPower);
 		}
 		else if(PlayerInfo.Action == (int)Actions.Quit)
 		{
@@ -258,7 +271,8 @@ public partial class Game : Node2D
 		else
 		{
 			//Reset
-			ProbaDieProgressBar.Value += 16;
+			Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
+			//ProbaDieProgressBar.Value += 16;
 			//ShowActionPlayerContainer.Visible = false;
 			CurrentState = State.ChooseAction;
 			Animation.Play("Reset");
@@ -296,5 +310,15 @@ public partial class Game : Node2D
 	private void PeerPlay(int PeerId)
 	{
 		players[PeerId].SetPlay();	
+	}
+
+	public void SetProbaDie(float proba)
+	{
+		ProbaDieProgressBar.Value = proba;
+	}
+
+	private void EndGame(bool HasWin)
+	{
+		NodeEndGame.SetEndGame(HasWin);
 	}
 }
