@@ -1,0 +1,5 @@
+[
+	{"Id":0,"Text":"Shows if the dossier is in the 3 next cards."},
+	{"Id":1,"Text":"Shows if the dossier is in the 2 next cards."},
+	{"Id":2,"Text":"Randomize your deck."}
+]

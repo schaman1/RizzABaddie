@@ -33,7 +33,7 @@ public partial class HostScene : Node
 	{
 		if (Multiplayer.GetPeers().Length > 0) //0 car ,e te cpmpte pas toi
 		{
-			Networking.Instance.StartGame();
+			Networking.Instance.ChangeToGameScene();
 		}
 		else
 		{
@@ -54,4 +54,5 @@ public partial class HostScene : Node
 			}
 		}
 	}
+
 }

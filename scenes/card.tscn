@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://d2yxt2i8n1nqc"]
 
-[node name="Control" type="Control" unique_id=1957760092]
+[ext_resource type="Script" uid="uid://bpexkprm62fiu" path="res://scripts/Card.cs" id="1_d81rb"]
+
+[node name="Control" type="Control" unique_id=1957760092 node_paths=PackedStringArray("TextLabel")]
+custom_minimum_size = Vector2(100, 150)
 custom_maximum_size = Vector2(100, 150)
 layout_mode = 3
 anchors_preset = 15
@@ -11,6 +14,8 @@ offset_bottom = -498.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+script = ExtResource("1_d81rb")
+TextLabel = NodePath("MarginContainer/Label")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=771551761]
 layout_mode = 1
@@ -38,9 +43,9 @@ layout_mode = 2
 color = Color(0.2520276, 0.25202766, 0.25202763, 1)
 
 [node name="Label" type="Label" parent="MarginContainer" unique_id=1150096169]
+custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 1
 theme_override_font_sizes/font_size = 14
 text = "CardName"
-horizontal_alignment = 1
-vertical_alignment = 2
+autowrap_mode = 2

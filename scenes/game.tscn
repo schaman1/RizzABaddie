@@ -1,11 +1,15 @@
 [gd_scene format=3 uid="uid://by7rugmnx33h6"]
 
 [ext_resource type="Script" uid="uid://dyabicf6hykn3" path="res://scripts/Game.cs" id="1_lnu2h"]
-[ext_resource type="Texture2D" uid="uid://bger5wwac5wur" path="res://assets/Losange.png" id="2_lbhrr"]
+[ext_resource type="Texture2D" uid="uid://bjt8ihp26foga" path="res://assets/Losange.png" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://ddc0ra33rwdc8" path="res://scenes/add_value.tscn" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://do368oih3yt64" path="res://scenes/week.tscn" id="3_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://wtr0g2tutq1y" path="res://scenes/main.tscn" id="4_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://honuf4m727sh" path="res://scenes/color_rect_end_game.tscn" id="5_p57ef"]
+[ext_resource type="PackedScene" uid="uid://cgngbupmoydaj" path="res://scenes/hand_display.tscn" id="7_0tnpc"]
+[ext_resource type="PackedScene" uid="uid://bddxqthuqyjxe" path="res://scenes/Losange.tscn" id="7_vtaks"]
+[ext_resource type="PackedScene" uid="uid://c1wsf28ps0g7v" path="res://scenes/canvas_layer_loading.tscn" id="10_vtaks"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
 bg_color = Color(1, 0.35686275, 0.35686275, 1)
@@ -208,7 +212,7 @@ _data = {
 &"Reset": SubResource("Animation_iywne")
 }
 
-[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "NodeEndGame")]
+[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "NodeEndGame", "LosangeYOrNo", "LayerLoading")]
 script = ExtResource("1_lnu2h")
 ButtonQuit = NodePath("CanvasLayer/MarginContainerCenter/ButtonQuit/TextureButton")
 ButtonDraw = NodePath("CanvasLayer/MarginContainerCenter/ButtonDraw/TextureButton")
@@ -221,8 +225,12 @@ MyPlayer = NodePath("CanvasLayer/MarginContainerCenter/PlayerContainer")
 TimerShowActions = NodePath("TimerShowCards")
 ProbaDieProgressBar = NodePath("CanvasLayer/MarginContainerBorder/ProgressBar")
 WeekBoxContainer = NodePath("CanvasLayer/MarginContainerBorder/Week")
+Hand = NodePath("CanvasLayer/Hand")
 NodeEndGame = NodePath("CanvasLayer/ColorRectEndGame")
 AddValuePackedScene = ExtResource("3_iywne")
+MainScene = ExtResource("4_u5sy4")
+LosangeYOrNo = NodePath("CanvasLayer/MarginContainerCenter/YesOrNo")
+LayerLoading = NodePath("CanvasLayerLoading")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1667825297]
 
@@ -259,15 +267,6 @@ show_percentage = false
 
 [node name="Week" parent="CanvasLayer/MarginContainerBorder" unique_id=883889003 instance=ExtResource("3_lbhrr")]
 layout_mode = 2
-
-[node name="Cards" type="HBoxContainer" parent="CanvasLayer" unique_id=1917402674]
-custom_minimum_size = Vector2(0, 150)
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
 
 [node name="MarginContainerCenter" type="MarginContainer" parent="CanvasLayer" unique_id=1014659603]
 anchors_preset = 15
@@ -423,9 +422,24 @@ text = "Deck"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="YesOrNo" parent="CanvasLayer/MarginContainerCenter" unique_id=1208364010 instance=ExtResource("7_vtaks")]
+layout_mode = 2
+
 [node name="ColorRectEndGame" parent="CanvasLayer" unique_id=1390121789 instance=ExtResource("5_p57ef")]
 visible = false
 z_index = 2
+
+[node name="Hand" parent="CanvasLayer" unique_id=780428763 instance=ExtResource("7_0tnpc")]
+custom_minimum_size = Vector2(0, 150)
+offset_left = 176.0
+offset_top = -100.0
+offset_right = -176.0
+offset_bottom = 50.0
+theme_override_constants/separation = -10
+alignment = 1
+
+[node name="CanvasLayerLoading" parent="." unique_id=105911108 instance=ExtResource("10_vtaks")]
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1831674433]
 root_node = NodePath("../CanvasLayer/MarginContainerCenter/ButtonQuit/Label")
@@ -434,8 +448,5 @@ libraries/ = SubResource("AnimationLibrary_lbhrr")
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1582407174]
 spawn_path = NodePath("..")
 
-[node name="PositionPlayerChoose" type="Marker2D" parent="." unique_id=437524980]
-position = Vector2(576, 100)
-
 [node name="TimerShowCards" type="Timer" parent="." unique_id=1781158152]
-wait_time = 2.0
+wait_time = 1.5

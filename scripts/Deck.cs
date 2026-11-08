@@ -113,4 +113,20 @@ public partial class Deck : Node
 		InitDeck();
 	}
 
+	public bool IsBombIn(int CheckNCards)
+	{
+		if(RemainingCards.Count< CheckNCards)
+		{
+			CheckNCards = RemainingCards.Count;
+		}
+		for(int i = 0; i < CheckNCards; i++)
+		{
+			if (RemainingCards[i].IsBomb())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

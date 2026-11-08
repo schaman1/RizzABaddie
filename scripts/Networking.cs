@@ -10,20 +10,25 @@ public partial class Networking : Node
 {
 	// Called when the node enters the scene tree for the first time.
 	[Signal] public delegate void EndGameEventHandler(bool HasWin);
+	[Signal] public delegate void OnHostDisconnectedEventHandler();
+	[Signal] public delegate void OnPlayerRemoveEventHandler(long Id);
 	[Signal] public delegate void HostCreatedEventHandler();
 	[Signal] public delegate void CodeNotFoundEventHandler();
 	[Signal] public delegate void ConnectionSuccessEventHandler();
+	[Signal] public delegate void AllPeerLoadGameSceneEventHandler();
 	[Signal] public delegate void RoundFinishEventHandler();
 	[Signal] public delegate void MancheStartEventHandler();
 	[Signal] public delegate void MancheFinishShopStartEventHandler();
 	[Signal] public delegate void PlayersChangedEventHandler();
+	[Signal] public delegate void ReceivedCardsEventHandler();
 	[Signal] public delegate void PlayersInitiatedEventHandler(); //When want to get existing players
 	[Signal] public delegate void PeerPlayEventHandler(int PeerId); //When want to get existing players
 	[Signal] public delegate void ProbaToSetEventHandler(float proba); //When want to get existing players
+	[Signal] public delegate void OnCardPlayEventHandler(int CardId,Godot.Collections.Array<int> CardInfo); //When want to get existing players
 
 	public string GameScene = "res://scenes/game.tscn";
 	private int CurrentManche = 0;
-	private int NbrMaxManchePerGame = 7;
+	private int NbrMaxManchePerGame = 3;
 
 	//State
 	public string JoinCode = "00000";
@@ -35,9 +40,11 @@ public partial class Networking : Node
 
 	// Valeurs de l'API Steam (GodotSteam)
 	private const int SteamLobbyTypePublic = 2;     // Steam.LOBBY_TYPE_PUBLIC
+	private const int SteamLobbyTypePrivate = 0;     // Steam.LOBBY_TYPE_PRIVATE
 	private const int SteamResultOk = 1;            // Steam.RESULT_OK
 	private const int SteamChatEnterSuccess = 1;    // Steam.CHAT_ROOM_ENTER_RESPONSE_SUCCESS
 	private const int SteamComparisonEqual = 0;     // Steam.LOBBY_COMPARISON_EQUAL
+	private long LobbyId;
 	
 	//Multiplayer Values :
 	private MultiplayerPeer _peer;
@@ -68,6 +75,7 @@ public partial class Networking : Node
 		Multiplayer.ConnectedToServer += () =>EmitSignal(SignalName.ConnectionSuccess);
 		Multiplayer.ConnectionFailed += () =>EmitSignal(SignalName.CodeNotFound);
 		Multiplayer.PeerConnected += OnPeerConnected;
+		Multiplayer.PeerDisconnected += OnPeerDisconnected;
 
 		Instance = this;
 	}
@@ -92,6 +100,12 @@ public partial class Networking : Node
 			HostEnet();
 		}
 		PlayersInfo.AddPlayer(Multiplayer.GetUniqueId(),Pseudo);
+		SetLobbyPublic(); //Not necessary as only called at the beginning = already public
+	}
+
+	public void RestartGame()
+	{
+		SetLobbyPublic();
 	}
 
 	//Without Steam
@@ -105,8 +119,32 @@ public partial class Networking : Node
 		JoinCode = "LOCAL";
 		EmitSignal(SignalName.HostCreated);
 	}
+
+	private void SetLobbyPrivate()
+	{
+		if (USE_STEAM)
+		{
+			_steam.Call("setLobbyType",LobbyId,SteamLobbyTypePrivate);
+		}
+		else
+		{
+			_peer.RefuseNewConnections = true;
+		}
+	}
+	private void SetLobbyPublic()
+	{
+		if (USE_STEAM)
+		{
+			_steam.Call("setLobbyType",LobbyId,SteamLobbyTypePublic);
+		}
+		else
+		{
+			_peer.RefuseNewConnections = false;
+		}
+		
+	}
 	//With Steam
-	private void OnLobbyCreated(long connected,long LobbyId)
+	private void OnLobbyCreated(long connected,long _LobbyId)
 	{
 		if(connected == SteamResultOk)
 		{
@@ -117,7 +155,8 @@ public partial class Networking : Node
 			Multiplayer.MultiplayerPeer = _peer;
 
 			JoinCode = GenerateJoinCode();
-			_steam.Call("setLobbyData",LobbyId,"join_code",JoinCode);
+			_steam.Call("setLobbyData",_LobbyId,"join_code",JoinCode);
+			LobbyId = _LobbyId;
 			EmitSignal(SignalName.HostCreated);
 		}
 	}
@@ -185,6 +224,26 @@ public partial class Networking : Node
 		}
 	}
 
+	public void OnPeerDisconnected(long Id)
+	{
+		GD.Print("Player disconnected");
+		if(Id == 1){//Means Host
+			EmitSignal(SignalName.OnHostDisconnected);
+			PlayersInfo.PlayerDic.Clear();
+		}
+		else
+		{
+			PlayersInfo.PlayerDic[Id].SetDisconnected();
+			if (IsHost)
+			{
+				RpcId(1,nameof(SendActionToHost),(int)Actions.Quit,Id);
+				Rpc(nameof(SetPeerHasPlay),Id);
+				EmitSignal(SignalName.PeerPlay,Id);//Server has to do it itself as calllocal = false;
+			}
+			EmitSignal(SignalName.OnPlayerRemove,Id);
+		}
+	}
+
 	//Rpc
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void GetPeerIdPseudo() //GetPlayerPseudo + Call create player 
@@ -207,6 +266,17 @@ public partial class Networking : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void LoadSceneGame()
 	{
+		foreach(Player player in PlayersInfo.PlayerDic.Values)
+		{
+			if (player.HasBeenDisconnected())
+			{
+				PlayersInfo.PlayerDic.Remove(player.Id);
+			}
+			else
+			{
+				player.Restart();
+			}
+		}
 		GetTree().ChangeSceneToFile(GameScene);
 	}
 
@@ -232,7 +302,7 @@ public partial class Networking : Node
 		RpcId(PeerId,nameof(SetPlayersInfo),PlayersInfo.CompressDatasPlayer()); //Needs to compress bcs with rpc can only pass Godot.Variant type
 	}
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
-	public void SetPlayersInfo(Godot.Collections.Dictionary<long,Godot.Collections.Array<int>> Infos)
+	public void SetPlayersInfo(Godot.Collections.Dictionary<long,Godot.Collections.Array<int>>Infos)
 	{
 		PlayersInfo.ExpandDatasPlayer(Infos);
 		EmitSignal(SignalName.PlayersChanged);
@@ -296,6 +366,16 @@ public partial class Networking : Node
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void SetInManche(long PeerId)
+	{
+		PlayersInfo.SetInManche(PeerId);
+		if (PlayersInfo.IsAllPlayerInManche())
+		{
+			StartGame();
+		}
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void FinishDisplayAll(long PeerId)
 	{
 		PlayersInfo.SetPlayerFInishDisplay(PeerId);
@@ -304,6 +384,7 @@ public partial class Networking : Node
 			if (CurrentManche == NbrMaxManchePerGame)
 			{
 				PlayersInfo.SetWinner();
+
 				foreach(Player player in PlayersInfo.PlayerDic.Values)
 				{
 					RpcId(player.Id,nameof(EmitEndGame),PlayersInfo.Winners.Contains(player));
@@ -327,6 +408,31 @@ public partial class Networking : Node
 	{
 		EmitSignal(SignalName.ProbaToSet,proba);
 	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void PlayCard(int IdCard,long PeerId)
+	{
+		Godot.Collections.Array<int> res = PlayersInfo.PlayerDic[PeerId].MyHand.PlayCard(IdCard,PlayersInfo.PlayerDic[PeerId].MyDeck,PeerId);
+		if (res != null) //Means if the card exist
+		{
+			RpcId(PeerId,nameof(ActiveCard),res);
+		}
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void RemoveCard(int CardId)
+	{
+		PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyHand.RemoveCard(CardId,Multiplayer.GetUniqueId());
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void AddCard(int CardId)
+	{
+		PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyHand.AddCard(CardId,Multiplayer.GetUniqueId());
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void ActiveCard(Godot.Collections.Array<int> res)
+	{
+		EmitSignal(SignalName.OnCardPlay,res[0],res[1..].ToArray<int>());
+	}
+
 	//Utils
 	private String ReturnUniquePseudo(String Pseudo)
 	{
@@ -352,18 +458,25 @@ public partial class Networking : Node
 		return Code;
 	} 
 
+	public void ChangeToGameScene()
+	{
+		SetLobbyPrivate();
+		Rpc(nameof(LoadSceneGame));
+		//When player in game_scene, call networking.SetInManche
+		//THen check, if everyplayer in manche, send startManche
+	}
+
 	//Game fct
 	public void StartGame()
 	{
+		CurrentManche = 0;
 		foreach(Player player in PlayersInfo.PlayerDic.Values)
 		{
 			player.Restart();
 		}
-		StartManche(false); //D'ont emit. Why ? Bcs player haven't time to connect things as load take time so needs to wait but difficult = let them initialise for the 1st time
-		Rpc(nameof(LoadSceneGame));
-		//StartManche(); //For the 1st time, players do it themself
+		StartManche();
 	}
-	public void StartManche(bool HasToEmit = true)
+	public void StartManche()
 	{
 		GD.Print("Start Manche");
 		CurrentManche+=1;
@@ -373,10 +486,7 @@ public partial class Networking : Node
 		{
 			player.StartManche(IdxBomb);
 		}
-		if (HasToEmit)
-		{
-			Rpc(nameof(EmitStartManche)); //Emit to all player
-		}
+		Rpc(nameof(EmitStartManche)); //Emit to all player
 	}
 	public void StartRound()
 	{

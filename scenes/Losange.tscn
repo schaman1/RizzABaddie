@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bddxqthuqyjxe"]
+
+[ext_resource type="Script" uid="uid://cf2tp1munq0aa" path="res://scripts/Losange.cs" id="1_7o3q5"]
+[ext_resource type="FontFile" uid="uid://drp4uw0wwusgj" path="res://font/Fat Kat.ttf" id="1_56yk8"]
+[ext_resource type="Texture2D" uid="uid://cidyn7jgcucyt" path="res://assets/LosangeBlue.png" id="2_7o3q5"]
+
+[node name="YesOrNo" type="Control" unique_id=1208364010 node_paths=PackedStringArray("label", "TimerShow")]
+visible = false
+z_index = 1
+custom_minimum_size = Vector2(400, 260)
+custom_maximum_size = Vector2(400, 260)
+propagate_maximum_size = true
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_7o3q5")
+label = NodePath("Label")
+TimerShow = NodePath("TimerShow")
+
+[node name="Label" type="Label" parent="." unique_id=1038857837]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_56yk8")
+theme_override_font_sizes/font_size = 64
+text = "Yes"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureRect" parent="." unique_id=1715145926]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 151.0
+offset_bottom = 99.0
+texture = ExtResource("2_7o3q5")
+
+[node name="TimerShow" type="Timer" parent="." unique_id=746681099]
+one_shot = true

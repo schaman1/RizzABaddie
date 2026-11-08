@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cgngbupmoydaj"]
+
+[ext_resource type="Script" uid="uid://dcf0tphgipvxm" path="res://scripts/HandDisplay.cs" id="1_h86fp"]
+[ext_resource type="PackedScene" uid="uid://d2yxt2i8n1nqc" path="res://scenes/card.tscn" id="2_ml2gv"]
+
+[node name="Cards" type="HBoxContainer" unique_id=780428763]
+custom_minimum_size = Vector2(0, 100)
+custom_maximum_size = Vector2(800, -1)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_h86fp")
+CardScene = ExtResource("2_ml2gv")

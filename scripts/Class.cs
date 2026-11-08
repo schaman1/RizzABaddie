@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Security.AccessControl;
 enum Actions {Draw=0,Quit=1,Nothing=-1}; //0 = Draw / 1 = Quit
-public enum State {InManche=0,FinishDisplayManche=1}; //Only use when end manche, wait for eveyrone one to be ready to restart
+public enum State {HasBeenDisconnected = -1,InManche=0,FinishDisplayManche=1,WaitForStartManche}; //Only use when end manche, wait for eveyrone one to be ready to restart
 
 public partial class CardInfo : Node
 {
@@ -16,6 +16,15 @@ public partial class CardInfo : Node
         this.Id = Id;
         this.Power = Power;
         this.Title = Title;
+    }
+
+    public bool IsBomb()
+    {
+        if(Id == 0 || Title == "Bomb")
+        {
+            return true;
+        }
+        return false;
     }
 
 }
@@ -36,6 +45,7 @@ public partial class PlayersInfoClass : Node
     {
         Player NewPlayer = new Player(_id,_name,DefaultLove,0,-1);
         PlayerDic[_id] = NewPlayer;
+        NewPlayer.Init();
         return NewPlayer;
     }
 
@@ -158,6 +168,23 @@ public partial class PlayersInfoClass : Node
         }
     }
 
+    public void SetInManche(long PeerId)
+    {
+        PlayerDic[PeerId].CurrentState = State.InManche;
+    }
+
+    public bool IsAllPlayerInManche()
+    {
+        foreach(Player player in PlayerDic.Values)
+        {
+            if (player.CurrentState == State.WaitForStartManche)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void SetPlayerFInishDisplay(long PeerId) //End manche, wait for all player to display all to start next
     {
         PlayerDic[PeerId].CurrentState = State.FinishDisplayManche;
@@ -166,7 +193,7 @@ public partial class PlayersInfoClass : Node
     {
         foreach(Player player in PlayerDic.Values)
         {
-            if (player.CurrentState != State.FinishDisplayManche)
+            if (player.CurrentState != State.FinishDisplayManche && player.CurrentState != State.HasBeenDisconnected)
             {
                 return false;
             }
@@ -206,8 +233,9 @@ public partial class Player: Node
     public int CardIdDraw = 0;
     public int CardPower = 0;
     public bool ReceivedAction = false;
-    public State CurrentState = State.InManche;
+    public State CurrentState = State.WaitForStartManche;
     public Deck MyDeck = new Deck();
+    public Hand MyHand = new Hand();
 
     public Player(long _id,string _name,int _Love, int _power, int _action)
     {
@@ -217,9 +245,14 @@ public partial class Player: Node
         Power = _power;
         Action = _action;
 
+    }
+
+    public void Init()
+    {
         if (Networking.Instance.IsHost)
         {
             MyDeck.InitDeck();
+            //MyHand.InitCards(Id);
         }
     }
 
@@ -243,11 +276,22 @@ public partial class Player: Node
     public void StartManche(int IdxBomb)
     {
         MyDeck.StartManche(IdxBomb);
-        Action = (int)Actions.Nothing; //Reset
-        CurrentState = State.InManche;
-        ReceivedAction = false;
-        CardIdDraw = -1;
-        CardPower = 0;
+        MyHand.StartManche(Id);
+        if (CurrentState != State.HasBeenDisconnected)
+        {
+            Action = (int)Actions.Nothing; //Reset
+            CurrentState = State.InManche;
+            ReceivedAction = false;
+            CardIdDraw = -1;
+            CardPower = 0;
+        }
+        else
+        {
+            Action = (int)Actions.Quit; //Reset
+            CardIdDraw = -1; //Number 1
+            CardPower = 0;
+        }
+
     }
 
     public void EndManche()
@@ -258,5 +302,27 @@ public partial class Player: Node
     public void Restart() //Call at each begin of game
     {
         MyDeck.Restart();
+        MyHand.InitCards(Id);
     }
+
+    public void SetDisconnected()
+    {
+        CurrentState = State.HasBeenDisconnected;
+        Action = (int)Actions.Quit;
+    }
+    public bool HasBeenDisconnected()
+    {
+        return CurrentState==State.HasBeenDisconnected;
+    }
+/*
+    public Godot.Collections.Array<int> CompressIdCardsRemaining()
+    {
+        return MyHand.CompressIdCardsRemaining();
+    }
+
+    public void ExpandIdCardsRemaining(Godot.Collections.Array<int> RemainingCards)
+    {
+        //MyHand.IdCardsRemaining.Clear();
+        MyHand.ExpandIdCardsRemaining(RemainingCards);
+    }*/
 }

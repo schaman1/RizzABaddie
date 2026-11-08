@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 /*To know 
 // s'exécute chez toi uniquement
@@ -30,11 +31,13 @@ public partial class Game : Node2D
 	[Export] PlayerContainer MyPlayer;
 	[Export] Timer TimerShowActions;
 	[Export] ProgressBar ProbaDieProgressBar;
-	[Export]Week WeekBoxContainer;
+	[Export] Week WeekBoxContainer;
+	[Export]HandDisplay Hand;
 	[Export] ColorRectEndGame NodeEndGame;
-
 	[Export]private PackedScene AddValuePackedScene;
-
+	[Export]private PackedScene MainScene;
+	[Export]Losange LosangeYOrNo;
+	[Export]CanvasLayerLoading LayerLoading;
 	private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
 	private PlayerContainer CurrentActivePlayerContainer = null;
 	public PlayersInfoClass players_dico;
@@ -53,6 +56,7 @@ public partial class Game : Node2D
 	public override async void _Ready()
 	{
 		//ShowActionPlayerContainer.Visible = false;
+		LayerLoading.Show();
 
 		ButtonQuit.Pressed += QuitPressed;
 		ButtonDraw.Pressed += DrawPressed;
@@ -67,9 +71,13 @@ public partial class Game : Node2D
 		Networking.Instance.PeerPlay += PeerPlay; //Idk how to do it
 		Networking.Instance.ProbaToSet += SetProbaDie;
 		Networking.Instance.EndGame += EndGame;
+		Networking.Instance.OnPlayerRemove += RemovePlayer;
+		Networking.Instance.OnHostDisconnected += OnHostDisconnected;
+		Networking.Instance.OnCardPlay += PlayCard;
 		
 		InitPlayers();
-		StartManche(); //Networking don't call it for the 1st time (bcs pbl et doit await mais dur)
+		Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId());
+		//StartManche(); //Networking don't call it for the 1st time (bcs pbl et doit await mais dur)
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -79,6 +87,11 @@ public partial class Game : Node2D
 
 	private async void StartManche()
 	{
+		await Networking.Instance.RequestPlayersInfo(); //Get values from host
+
+		await Task.Delay(TimeSpan.FromMilliseconds(1000));
+		
+		LayerLoading.Hide();
 		IdxOfManche+=1;
 		CurrentState = State.ChooseAction;
 		Animation.Play("Reset");
@@ -86,6 +99,7 @@ public partial class Game : Node2D
 		UpdatePlayers();
 		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
 		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
+		ResetHasPlayerPlayerBeginManche();
 	}
 
 	private async void MancheFinish() //Not good az don't throw the signal at the end
@@ -161,6 +175,8 @@ public partial class Game : Node2D
 			int Love = player.Love;
 			AddPlayer(player.Id,name,Love);
 		}
+
+		Hand.Init();
 	}
 
 	private void AddPlayer(long Id,String name,int Love)
@@ -276,11 +292,35 @@ public partial class Game : Node2D
 			//ShowActionPlayerContainer.Visible = false;
 			CurrentState = State.ChooseAction;
 			Animation.Play("Reset");
+			MyPlayer.Reset();
 		}
+		ResetHasPlayedPlayer();
+	}
 
-		foreach(PlayerContainer player in players.Values)
+	public void ResetHasPlayedPlayer(){
+	
+		foreach(Player player in players_dico.PlayerDic.Values)
 		{
-			player.Reset();
+			if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
+			{
+				if ((int)player.Action != 1)
+				{
+					players[player.Id].Reset();
+				}
+			}
+		}
+	}
+	public void ResetHasPlayerPlayerBeginManche()
+	{
+		foreach(Player player in players_dico.PlayerDic.Values)
+		{
+			if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
+			{
+				if ((int)player.CurrentState != -1) // 1 = 
+				{
+					players[player.Id].Reset();
+				}
+			}
 		}
 		MyPlayer.Reset();
 	}
@@ -320,5 +360,24 @@ public partial class Game : Node2D
 	private void EndGame(bool HasWin)
 	{
 		NodeEndGame.SetEndGame(HasWin);
+	}
+
+	private void OnHostDisconnected()
+	{
+		GetTree().ChangeSceneToPacked(MainScene);
+	}
+
+	private void RemovePlayer(long Id)
+	{
+		players[Id].SetColorDisconnected();// Set to black
+	}
+
+	private void PlayCard(int CardId,Godot.Collections.Array<int> CardInfo)
+	{
+		List<int> YesOrNoCard = [0,1];
+		if (YesOrNoCard.Contains(CardId))
+		{
+			LosangeYOrNo.ShowYesOrNo(CardInfo[0]);
+		}
 	}
 }

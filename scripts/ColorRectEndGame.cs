@@ -38,12 +38,14 @@ public partial class ColorRectEndGame : ColorRect
 
 	public void QuitGame()
 	{//Needs to deco from the network
+		Networking.Instance.Rpc(nameof(Networking.Instance.OnPeerDisconnected),Multiplayer.GetUniqueId());
 		GetTree().ChangeSceneToPacked(MainScene);
 	}
 	public void RestartGame()
 	{
 		if (Networking.Instance.IsHost)
 		{
+			Networking.Instance.RestartGame();
 			GetTree().ChangeSceneToPacked(HostScene);
 		}
 		else

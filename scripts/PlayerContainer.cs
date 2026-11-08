@@ -9,10 +9,12 @@ public partial class PlayerContainer : Godot.MarginContainer
 	[Export]Label LabelName;
 	[Export]Label LabelLove;
 	[Export]Label LabelPower;
-	[Export]Color ColorActive;
-	[Export]Color ColorPassive;
+	[Export]public Color ColorActive;
+	[Export]public Color ColorPassive;
+	[Export]public Color DisconnectedColor;
 	[Export]ColorRect BorderColorRect;
 	[Export]ColorRect HasPlayedColorRect;
+	[Export]ColorRect BgColorRect;
 
 	public string name = "Player";
 	public int Love = 0;
@@ -49,6 +51,11 @@ public partial class PlayerContainer : Godot.MarginContainer
 	{
 		Love -= Damage;
 		DisplayValues();
+	}
+
+	public void SetColorDisconnected()
+	{
+		BgColorRect.Color = DisconnectedColor;
 	}
 
 	public void Active()
