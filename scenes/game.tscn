@@ -214,27 +214,27 @@ _data = {
 
 [node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "NodeEndGame", "LosangeYOrNo", "LayerLoading")]
 script = ExtResource("1_lnu2h")
-ButtonQuit = NodePath("CanvasLayer/MarginContainerCenter/ButtonQuit/TextureButton")
-ButtonDraw = NodePath("CanvasLayer/MarginContainerCenter/ButtonDraw/TextureButton")
+ButtonQuit = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonQuit/TextureButton")
+ButtonDraw = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonDraw/TextureButton")
 Animation = NodePath("AnimationPlayer")
-LabelActionChoose = NodePath("CanvasLayer/MarginContainerCenter/WhatChose/LabelActionChoose")
-LabelDeck = NodePath("CanvasLayer/MarginContainerCenter/Deck/LabelDeck")
-PlayerContainer = NodePath("CanvasLayer/MarginContainerBorder/Players")
+LabelActionChoose = NodePath("CanvasLayerCard/MarginContainerCenter/WhatChose/LabelActionChoose")
+LabelDeck = NodePath("CanvasLayerCard/MarginContainerCenter/Deck/LabelDeck")
+PlayerContainer = NodePath("CanvasLayerCard/MarginContainerBorder/Players")
 PlayerPackedScene = ExtResource("3_lnu2h")
-MyPlayer = NodePath("CanvasLayer/MarginContainerCenter/PlayerContainer")
+MyPlayer = NodePath("CanvasLayerCard/MarginContainerCenter/PlayerContainer")
 TimerShowActions = NodePath("TimerShowCards")
-ProbaDieProgressBar = NodePath("CanvasLayer/MarginContainerBorder/ProgressBar")
-WeekBoxContainer = NodePath("CanvasLayer/MarginContainerBorder/Week")
-Hand = NodePath("CanvasLayer/Hand")
-NodeEndGame = NodePath("CanvasLayer/ColorRectEndGame")
+ProbaDieProgressBar = NodePath("CanvasLayerCard/MarginContainerBorder/ProgressBar")
+WeekBoxContainer = NodePath("CanvasLayerCard/MarginContainerBorder/Week")
+Hand = NodePath("CanvasLayerCard/Hand")
+NodeEndGame = NodePath("CanvasLayerCard/ColorRectEndGame")
 AddValuePackedScene = ExtResource("3_iywne")
 MainScene = ExtResource("4_u5sy4")
-LosangeYOrNo = NodePath("CanvasLayer/MarginContainerCenter/YesOrNo")
+LosangeYOrNo = NodePath("CanvasLayerCard/MarginContainerCenter/YesOrNo")
 LayerLoading = NodePath("CanvasLayerLoading")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1667825297]
+[node name="CanvasLayerCard" type="CanvasLayer" parent="." unique_id=1667825297]
 
-[node name="MarginContainerBorder" type="MarginContainer" parent="CanvasLayer" unique_id=1769118479]
+[node name="MarginContainerBorder" type="MarginContainer" parent="CanvasLayerCard" unique_id=1769118479]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -245,8 +245,7 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 
-[node name="Players" type="HBoxContainer" parent="CanvasLayer/MarginContainerBorder" unique_id=586711297]
-custom_minimum_size = Vector2(0, 100)
+[node name="Players" type="HBoxContainer" parent="CanvasLayerCard/MarginContainerBorder" unique_id=586711297]
 custom_maximum_size = Vector2(800, -1)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -254,7 +253,7 @@ size_flags_vertical = 0
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/MarginContainerBorder" unique_id=1744335086]
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayerCard/MarginContainerBorder" unique_id=1744335086]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -265,10 +264,10 @@ value = 50.0
 fill_mode = 3
 show_percentage = false
 
-[node name="Week" parent="CanvasLayer/MarginContainerBorder" unique_id=883889003 instance=ExtResource("3_lbhrr")]
+[node name="Week" parent="CanvasLayerCard/MarginContainerBorder" unique_id=883889003 instance=ExtResource("3_lbhrr")]
 layout_mode = 2
 
-[node name="MarginContainerCenter" type="MarginContainer" parent="CanvasLayer" unique_id=1014659603]
+[node name="MarginContainerCenter" type="MarginContainer" parent="CanvasLayerCard" unique_id=1014659603]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -279,12 +278,12 @@ theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 300
 theme_override_constants/margin_bottom = 100
 
-[node name="PlayerContainer" parent="CanvasLayer/MarginContainerCenter" unique_id=2042746711 instance=ExtResource("3_lnu2h")]
+[node name="PlayerContainer" parent="CanvasLayerCard/MarginContainerCenter" unique_id=2042746711 instance=ExtResource("3_lnu2h")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="WhatChose" type="Control" parent="CanvasLayer/MarginContainerCenter" unique_id=1409862653]
+[node name="WhatChose" type="Control" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1409862653]
 visible = false
 custom_minimum_size = Vector2(150, 100)
 custom_maximum_size = Vector2(150, 100)
@@ -293,7 +292,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="LabelActionChoose" type="Label" parent="CanvasLayer/MarginContainerCenter/WhatChose" unique_id=696741496]
+[node name="LabelActionChoose" type="Label" parent="CanvasLayerCard/MarginContainerCenter/WhatChose" unique_id=696741496]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -312,7 +311,7 @@ text = "Draw"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureButton" type="TextureRect" parent="CanvasLayer/MarginContainerCenter/WhatChose" unique_id=923834818]
+[node name="TextureButton" type="TextureRect" parent="CanvasLayerCard/MarginContainerCenter/WhatChose" unique_id=923834818]
 layout_mode = 0
 offset_left = 1.0
 offset_top = -1.0
@@ -320,7 +319,7 @@ offset_right = 151.0
 offset_bottom = 99.0
 texture = ExtResource("2_lbhrr")
 
-[node name="ButtonDraw" type="Control" parent="CanvasLayer/MarginContainerCenter" unique_id=1883296518]
+[node name="ButtonDraw" type="Control" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1883296518]
 custom_minimum_size = Vector2(150, 100)
 custom_maximum_size = Vector2(150, 100)
 propagate_maximum_size = true
@@ -328,7 +327,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="CanvasLayer/MarginContainerCenter/ButtonDraw" unique_id=2053732966]
+[node name="Label" type="Label" parent="CanvasLayerCard/MarginContainerCenter/ButtonDraw" unique_id=2053732966]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -347,7 +346,7 @@ text = "Draw"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureButton" type="TextureButton" parent="CanvasLayer/MarginContainerCenter/ButtonDraw" unique_id=1061730711]
+[node name="TextureButton" type="TextureButton" parent="CanvasLayerCard/MarginContainerCenter/ButtonDraw" unique_id=1061730711]
 layout_mode = 0
 offset_left = 1.0
 offset_top = -1.0
@@ -360,7 +359,7 @@ texture_disabled = ExtResource("2_lbhrr")
 texture_focused = ExtResource("2_lbhrr")
 stretch_mode = 0
 
-[node name="ButtonQuit" type="Control" parent="CanvasLayer/MarginContainerCenter" unique_id=1877687592]
+[node name="ButtonQuit" type="Control" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1877687592]
 custom_minimum_size = Vector2(150, 100)
 custom_maximum_size = Vector2(150, 100)
 propagate_maximum_size = true
@@ -368,7 +367,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="CanvasLayer/MarginContainerCenter/ButtonQuit" unique_id=1895307441]
+[node name="Label" type="Label" parent="CanvasLayerCard/MarginContainerCenter/ButtonQuit" unique_id=1895307441]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -387,7 +386,7 @@ text = "Quit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureButton" type="TextureButton" parent="CanvasLayer/MarginContainerCenter/ButtonQuit" unique_id=1194185824]
+[node name="TextureButton" type="TextureButton" parent="CanvasLayerCard/MarginContainerCenter/ButtonQuit" unique_id=1194185824]
 layout_mode = 0
 offset_left = 1.0
 offset_top = -1.0
@@ -400,7 +399,7 @@ texture_disabled = ExtResource("2_lbhrr")
 texture_focused = ExtResource("2_lbhrr")
 stretch_mode = 0
 
-[node name="Deck" type="ColorRect" parent="CanvasLayer/MarginContainerCenter" unique_id=1105697441]
+[node name="Deck" type="ColorRect" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1105697441]
 custom_minimum_size = Vector2(100, 150)
 custom_maximum_size = Vector2(100, 150)
 layout_mode = 2
@@ -408,7 +407,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.6392157, 0.24313726, 0.5686275, 1)
 
-[node name="LabelDeck" type="Label" parent="CanvasLayer/MarginContainerCenter/Deck" unique_id=681250412]
+[node name="LabelDeck" type="Label" parent="CanvasLayerCard/MarginContainerCenter/Deck" unique_id=681250412]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -422,14 +421,14 @@ text = "Deck"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="YesOrNo" parent="CanvasLayer/MarginContainerCenter" unique_id=1208364010 instance=ExtResource("7_vtaks")]
+[node name="YesOrNo" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1208364010 instance=ExtResource("7_vtaks")]
 layout_mode = 2
 
-[node name="ColorRectEndGame" parent="CanvasLayer" unique_id=1390121789 instance=ExtResource("5_p57ef")]
+[node name="ColorRectEndGame" parent="CanvasLayerCard" unique_id=1390121789 instance=ExtResource("5_p57ef")]
 visible = false
 z_index = 2
 
-[node name="Hand" parent="CanvasLayer" unique_id=780428763 instance=ExtResource("7_0tnpc")]
+[node name="Hand" parent="CanvasLayerCard" unique_id=780428763 instance=ExtResource("7_0tnpc")]
 custom_minimum_size = Vector2(0, 150)
 offset_left = 176.0
 offset_top = -100.0
@@ -442,7 +441,7 @@ alignment = 1
 visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1831674433]
-root_node = NodePath("../CanvasLayer/MarginContainerCenter/ButtonQuit/Label")
+root_node = NodePath("../CanvasLayerCard/MarginContainerCenter/ButtonQuit/Label")
 libraries/ = SubResource("AnimationLibrary_lbhrr")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1582407174]

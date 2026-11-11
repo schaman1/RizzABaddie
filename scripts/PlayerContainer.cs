@@ -8,7 +8,7 @@ public partial class PlayerContainer : Godot.MarginContainer
 	// Called when the node enters the scene tree for the first time.
 	[Export]Label LabelName;
 	[Export]Label LabelLove;
-	[Export]Label LabelPower;
+	//[Export]Label LabelPower;
 	[Export]public Color ColorActive;
 	[Export]public Color ColorPassive;
 	[Export]public Color DisconnectedColor;
@@ -34,7 +34,7 @@ public partial class PlayerContainer : Godot.MarginContainer
 	public void DisplayValues()
 	{
 		LabelLove.Text = "Love = " + Love.ToString();
-		LabelPower.Text = "Power = "+ power.ToString();
+		//LabelPower.Text = "Power = "+ power.ToString();
 		LabelName.Text = name;
 	}
 

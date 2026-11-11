@@ -6,14 +6,13 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r7lr4"]
 shader = ExtResource("2_a7xq8")
 
-[node name="PlayerContainer" type="MarginContainer" unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "LabelPower", "BorderColorRect", "HasPlayedColorRect", "BgColorRect")]
+[node name="PlayerContainer" type="MarginContainer" unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "BorderColorRect", "HasPlayedColorRect", "BgColorRect")]
 propagate_maximum_size = false
 offset_right = 100.0
 offset_bottom = 47.0
 script = ExtResource("1_r7lr4")
 LabelName = NodePath("MarginContainer/VBoxContainer/Name")
 LabelLove = NodePath("MarginContainer/VBoxContainer/Love")
-LabelPower = NodePath("MarginContainer/VBoxContainer/Power")
 ColorActive = Color(0, 0.6862745, 0.6862745, 1)
 ColorPassive = Color(0, 0.3019608, 0.3019608, 1)
 DisconnectedColor = Color(0.082535766, 0.1265128, 0.12651491, 1)
@@ -54,10 +53,6 @@ vertical_alignment = 1
 [node name="Love" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1204894259]
 layout_mode = 2
 text = "Love : 0"
-
-[node name="Power" type="Label" parent="MarginContainer/VBoxContainer" unique_id=247068764]
-layout_mode = 2
-text = "Power : 0"
 
 [node name="ColorRectHasPlay" type="ColorRect" parent="MarginContainer" unique_id=1150423380]
 material = SubResource("ShaderMaterial_r7lr4")

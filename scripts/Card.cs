@@ -91,7 +91,7 @@ public partial class Card : Control
 		tween.SetTrans(Tween.TransitionType.Expo);
 
 		tween.TweenProperty(this,"position",PositionDie,1.0f);
-		tween.TweenProperty(this,"modulate",Colors.Transparent,1.0f);
+		tween.Parallel().TweenProperty(this,"modulate",Colors.Transparent,1.0f);
 		tween.TweenCallback(Callable.From(QueueFree));
 	}
 }

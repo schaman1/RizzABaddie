@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 /*To know 
 // s'exécute chez toi uniquement
@@ -50,7 +48,6 @@ public partial class Game : Node2D
 
 	enum Actions {Nothing = -1,Draw=0,Quit=1}; //0 = Draw / 1 = Quit
 	Actions ActionChoose = Actions.Nothing;
-
 	private long MyId;
 
 	public override async void _Ready()
@@ -58,22 +55,22 @@ public partial class Game : Node2D
 		//ShowActionPlayerContainer.Visible = false;
 		LayerLoading.Show();
 
-		ButtonQuit.Pressed += QuitPressed;
-		ButtonDraw.Pressed += DrawPressed;
+		ButtonQuit.Connect("pressed",Callable.From(QuitPressed));
+		ButtonDraw.Connect("pressed",Callable.From(DrawPressed));
 
 		TimerShowActions.Timeout += ShowActionPlayer;
 
 		MyId = Multiplayer.GetUniqueId();
 		//Networking.Instance.PlayersChanged += UpdatePlayers;
-		Networking.Instance.RoundFinish += RoundFinish;
-		Networking.Instance.MancheFinishShopStart += MancheFinish;
-		Networking.Instance.MancheStart += StartManche;
-		Networking.Instance.PeerPlay += PeerPlay; //Idk how to do it
-		Networking.Instance.ProbaToSet += SetProbaDie;
-		Networking.Instance.EndGame += EndGame;
-		Networking.Instance.OnPlayerRemove += RemovePlayer;
-		Networking.Instance.OnHostDisconnected += OnHostDisconnected;
-		Networking.Instance.OnCardPlay += PlayCard;
+		Networking.Instance.Connect(nameof(Networking.Instance.RoundFinish),Callable.From(RoundFinish));
+		Networking.Instance.Connect(nameof(Networking.Instance.MancheFinishShopStart),Callable.From(MancheFinish));
+		Networking.Instance.Connect(nameof(Networking.Instance.MancheStart),Callable.From(StartManche));
+		Networking.Instance.Connect(nameof(Networking.Instance.PeerPlay),Callable.From<int>(PeerPlay)); //Idk how to do it
+		Networking.Instance.Connect(nameof(Networking.Instance.ProbaToSet),Callable.From<float>(SetProbaDie));
+		Networking.Instance.Connect(nameof(Networking.Instance.EndGame),Callable.From<bool>(EndGame));
+		Networking.Instance.Connect(nameof(Networking.Instance.OnPlayerRemove),Callable.From<long>(RemovePlayer));
+		Networking.Instance.Connect(nameof(Networking.Instance.OnHostDisconnected),Callable.From(OnHostDisconnected));
+		Networking.Instance.Connect(nameof(Networking.Instance.OnCardPlay),Callable.From<int,Godot.Collections.Array<int>>(PlayCard));
 		
 		InitPlayers();
 		Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId());
@@ -89,13 +86,14 @@ public partial class Game : Node2D
 	{
 		await Networking.Instance.RequestPlayersInfo(); //Get values from host
 
-		await Task.Delay(TimeSpan.FromMilliseconds(1000));
+		//await Task.Delay(TimeSpan.FromMilliseconds(1000));
 		
 		LayerLoading.Hide();
 		IdxOfManche+=1;
 		CurrentState = State.ChooseAction;
 		Animation.Play("Reset");
 		ActionChoose = Actions.Nothing;
+		Hand.ShowHand();
 		UpdatePlayers();
 		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
 		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
@@ -140,6 +138,7 @@ public partial class Game : Node2D
 			//In order to rpcid networking.instance.fctname il faut faire networking.instance.rpcid() le lancer depuis networking
 			Networking.Instance.SetPeerAction((int)Action);
 			MyPlayer.SetPlay();
+			Hand.HideHand();
 			Animation.Play("Choose");
 
 			return;
@@ -225,6 +224,7 @@ public partial class Game : Node2D
 			CurrentActivePlayerContainer.Passive();
 			if(CurrentState == State.RevealEndManche)
 			{
+				Hand.StartManche();
 				Networking.Instance.RpcId(1,nameof(Networking.Instance.FinishDisplayAll),Multiplayer.GetUniqueId());
 			}
 			else
@@ -255,7 +255,7 @@ public partial class Game : Node2D
 	{
 
 		//Draw the current action of the player
-		if(PlayerInfo.Action == (int)Actions.Draw || PlayerInfo.CardIdDraw == 0) //Bomb and 1st bcs else draw quit
+		if(PlayerInfo.Action == (int)Actions.Draw || PlayerInfo.CardIdDraw == 0) //Bomb bcs with bomb, action = quit but actually has draw.
 		{
 			LabelDeck.Text = "Draw\n" +PlayerInfo.CardPower.ToString();
 			CurrentActivePlayerContainer.SetNewLove(-PlayerInfo.CardPower); // - bcs bomb deals damage, no heal
@@ -291,6 +291,7 @@ public partial class Game : Node2D
 			//ProbaDieProgressBar.Value += 16;
 			//ShowActionPlayerContainer.Visible = false;
 			CurrentState = State.ChooseAction;
+			Hand.ShowHand();
 			Animation.Play("Reset");
 			MyPlayer.Reset();
 		}

@@ -21,18 +21,16 @@ public partial class Hand : Node
     {
         IdCards.Clear();
         IdCardsRemaining.Clear();
-        IdCards.Add(0);
+        //IdCards.Add(0);
         IdCards.Add(1);
     }
 
     public void StartManche(long PlayerId)
     {
-        GD.Print("In Start Manche Hand",IdCards,IdCards.Count);
         IdCardsRemaining.Clear();
         foreach(int id in IdCards)
         {
             IdCardsRemaining.Add(id);
-            //GD.Print("In Start Manche Hand",IdCards,IdCards.Count);
             // if (PlayerId==1) //If player is Host
             // {
             // }
@@ -93,7 +91,6 @@ public partial class Hand : Node
 
     public void AddCardServ(int CardId,long PeerId)//Only adds to hand
     {
-        GD.Print("Add card serv : id ",CardId);
         Networking.Instance.RpcId(PeerId,nameof(Networking.Instance.AddCard),CardId);
     }
 

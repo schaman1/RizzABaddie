@@ -15,20 +15,47 @@ public partial class HandDisplay : HBoxContainer
 
 	List<Card> CardsInHand = new List<Card>();
 
+	enum State {Normal,Block};
+	State CurrentState = State.Normal;
+
 	int IdxCardHover = -1;
+	Vector2 InitPosition;
 
 	public override void _Ready()
 	{
+		InitPosition = Position;
 	}
 	public void Init(){
 		InitDataCard();
-		Networking.Instance.PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyHand.CardAdded += AddCard;
-		Networking.Instance.PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyHand.CardRemoved += RemoveCard;
+		int i = Multiplayer.GetUniqueId();
+		Player play = Networking.Instance.PlayersInfo.PlayerDic[i];
+
+		play.MyHand.Connect(nameof(play.MyHand.CardAdded),Callable.From<int>(AddCard));
+		play.MyHand.Connect(nameof(play.MyHand.CardRemoved),Callable.From<int>(RemoveCard));
 	}
+
+	// public void DisposeEvent()
+	// {
+	// 	Networking.Instance.PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyHand.CardAdded-= AddCard;
+	// 	Networking.Instance.PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].MyHand.CardRemoved-= RemoveCard;
+	// }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+	}
+
+	public void StartManche()
+	{
+		int i = 0;
+		while (i < CardsInHand.Count)
+		{
+			Card card = CardsInHand[i];
+			CardsInHand.RemoveAt(i);
+			//RemoveChild(card);
+			card.Destroy();
+			i++;
+		}
 	}
 
 	private void InitDataCard()
@@ -52,7 +79,6 @@ public partial class HandDisplay : HBoxContainer
 
 	public void AddCard(int id)
 	{
-		GD.Print("AddCard Hand Display");
 		Card NewCard = (Card)CardScene.Instantiate();
 		AddChild(NewCard);
 		NewCard.Init(id,TextCards[id],CardsInHand.Count);
@@ -71,8 +97,10 @@ public partial class HandDisplay : HBoxContainer
 		}
 		if (i < CardsInHand.Count)
 		{
-			CardsInHand[i].Destroy();
+			Card card = CardsInHand[i];
 			CardsInHand.RemoveAt(i);
+			//RemoveChild(card);
+			card.Destroy();
 		}
 		for(int j = i; j < CardsInHand.Count; j++)
 		{
@@ -90,7 +118,7 @@ public partial class HandDisplay : HBoxContainer
 
 	private void CardHover(int Idx)
 	{
-		if (!IsOneCardHover())
+		if (!IsOneCardHover() && CurrentState==State.Normal)
 		{
 			//Then hover this card
 			IdxCardHover = Idx;
@@ -169,5 +197,24 @@ public partial class HandDisplay : HBoxContainer
 	private void PlayCard(int Idx)
 	{
 		Networking.Instance.RpcId(1,nameof(Networking.Instance.PlayCard),CardsInHand[Idx].Id,Multiplayer.GetUniqueId());
+	}
+
+	public void HideHand()
+	{
+		Vector2 NewPosition = Position;
+		NewPosition.Y+=100+10; //+10 to make it less visible (at the end where it is slow)
+		Tween tweenShowHide = CreateTween();
+		tweenShowHide.SetTrans(Tween.TransitionType.Expo);
+		tweenShowHide.SetEase(Tween.EaseType.Out);
+		tweenShowHide.TweenProperty(this,"position",NewPosition,1.0f);
+		CurrentState = State.Block;
+	}
+	public void ShowHand()
+	{
+		Tween tweenShowHide = CreateTween();
+		tweenShowHide.SetTrans(Tween.TransitionType.Expo);
+		tweenShowHide.SetEase(Tween.EaseType.Out);
+		tweenShowHide.TweenProperty(this,"position",InitPosition,1.0f);
+		CurrentState = State.Normal;
 	}
 }
