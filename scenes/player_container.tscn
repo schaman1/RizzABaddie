@@ -8,8 +8,8 @@ shader = ExtResource("2_a7xq8")
 
 [node name="PlayerContainer" type="MarginContainer" unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "BorderColorRect", "HasPlayedColorRect", "BgColorRect")]
 propagate_maximum_size = false
-offset_right = 100.0
-offset_bottom = 47.0
+offset_right = 116.0
+offset_bottom = 51.0
 script = ExtResource("1_r7lr4")
 LabelName = NodePath("MarginContainer/VBoxContainer/Name")
 LabelLove = NodePath("MarginContainer/VBoxContainer/Love")
@@ -26,17 +26,17 @@ color = Color(0, 0.6862745, 0.6862745, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1054202066]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="ColorRectBg" type="ColorRect" parent="MarginContainer" unique_id=1218991659]
 layout_mode = 2
 color = Color(0, 0.30086526, 0.30086514, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1833042064]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(100, 0)
 propagate_maximum_size = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -45,17 +45,18 @@ theme_override_constants/separation = 0
 
 [node name="Name" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1819496330]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Player1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Love" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1204894259]
 layout_mode = 2
+theme_override_font_sizes/font_size = 8
 text = "Love : 0"
 
 [node name="ColorRectHasPlay" type="ColorRect" parent="MarginContainer" unique_id=1150423380]
 material = SubResource("ShaderMaterial_r7lr4")
-custom_maximum_size = Vector2(30, 30)
+custom_maximum_size = Vector2(15, 15)
 layout_mode = 2
 color = Color(0.21960784, 1, 0.23921569, 1)

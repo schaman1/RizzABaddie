@@ -21,6 +21,7 @@ public partial class HostScene : Node
 		ButtonStartGame.Pressed += OnStartGamePressed;
 
 		LabelPseudo.Text = Networking.Instance.PlayersInfo.PlayerDic[Multiplayer.GetUniqueId()].Pseudo; //Already here as is the host
+		Networking.Instance.Connect(nameof(Networking.Instance.OnPlayerRemove),Callable.From<long>(RemovePlayerLabel));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,10 +50,21 @@ public partial class HostScene : Node
 			{
 				Label newLabel = (Label)LabelPackedScene.Instantiate();
 				newLabel.Text = Networking.Instance.PlayersInfo.PlayerDic[Id].Pseudo;
+				newLabel.Modulate = newLabel.Modulate/2;
 				DictLabelPlayers[Id] = newLabel;
 				PseudoContainer.AddChild(newLabel);
 			}
+			if (DictLabelPlayers.Keys.Contains(Id) && Networking.Instance.PlayersInfo.PlayerDic[Id].WaitForStart()) //Normally always true but we never know
+			{
+				DictLabelPlayers[Id].Modulate = new Color(1,1,1,1);//White
+			}
 		}
+	}
+
+	public void RemovePlayerLabel(long Id)
+	{
+		DictLabelPlayers[Id].QueueFree();
+		DictLabelPlayers.Remove(Id);
 	}
 
 }

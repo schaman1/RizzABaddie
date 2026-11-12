@@ -21,6 +21,9 @@ Networking="*uid://07dt0e5ryuf5"
 
 [display]
 
+window/size/viewport_width=576
+window/size/viewport_height=324
+window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

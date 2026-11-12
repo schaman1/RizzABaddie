@@ -23,6 +23,7 @@ public partial class Hand : Node
         IdCardsRemaining.Clear();
         //IdCards.Add(0);
         IdCards.Add(1);
+        //GD.Print("Nbr of cards : ",IdCards.Count);
     }
 
     public void StartManche(long PlayerId)
@@ -34,6 +35,7 @@ public partial class Hand : Node
             // if (PlayerId==1) //If player is Host
             // {
             // }
+            GD.Print("Add card to : ",PlayerId);
             AddCardServ(id,PlayerId);
         }
     }

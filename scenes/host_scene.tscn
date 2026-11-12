@@ -38,14 +38,14 @@ theme_override_constants/margin_bottom = 50
 
 [node name="LabelPseudo" type="Label" parent="CanvasLayer/VBoxContainer/MarginContainer" unique_id=2078149533]
 layout_mode = 2
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "Pseudo"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LabelCode" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=708438283]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Join Code :"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -55,13 +55,13 @@ custom_maximum_size = Vector2(200, -1)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Start Game"
 
 [node name="LabelInfo" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=1506733750]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7670247, 2.5268644e-06, 9.62615e-07, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer" unique_id=1147979418]
@@ -70,7 +70,7 @@ offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="CanvasLayer/VBoxContainer2" unique_id=1592921787]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Players : "
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]

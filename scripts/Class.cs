@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Security.AccessControl;
 enum Actions {Draw=0,Quit=1,Nothing=-1}; //0 = Draw / 1 = Quit
-public enum State {HasBeenDisconnected = -1,InManche=0,FinishDisplayManche=1,WaitForStartManche}; //Only use when end manche, wait for eveyrone one to be ready to restart
+public enum State {HasBeenDisconnected = -1,InManche=0,FinishDisplayManche=1,WaitForStartManche,InMenu}; //Only use when end manche, wait for eveyrone one to be ready to restart
 
 public partial class CardInfo : Node
 {
@@ -39,6 +39,15 @@ public partial class PlayersInfoClass : Node
     public Player GetPlayer(int Id)
     {
         return PlayerDic[Id];
+    }
+
+    public void Restart()
+    {
+        Winners.Clear();
+		foreach(Player player in PlayerDic.Values)
+		{
+			player.Restart();
+		}
     }
 
     public Player AddPlayer(long _id,string _name)
@@ -172,6 +181,10 @@ public partial class PlayersInfoClass : Node
     {
         PlayerDic[PeerId].CurrentState = State.InManche;
     }
+    public void SetNotInManche(long PeerId)
+    {
+        PlayerDic[PeerId].CurrentState = State.WaitForStartManche;
+    }
 
     public bool IsAllPlayerInManche()
     {
@@ -183,6 +196,17 @@ public partial class PlayersInfoClass : Node
             }
         }
         return true;
+    }
+
+    public void SetPlayersNotInManche()
+    {
+        // foreach(long id in PlayerDic.Keys)
+        // {
+        //     SetNotInManche(id); //
+        // }
+        SetNotInManche(1);
+        //Have change things. Now, the players itself put this on when they reconnect/ press restart 
+        
     }
 
     public void SetPlayerFInishDisplay(long PeerId) //End manche, wait for all player to display all to start next
@@ -256,6 +280,8 @@ public partial class Player: Node
         }
     }
 
+    public bool WaitForStart(){return CurrentState==State.WaitForStartManche;}
+
     public void SetValues(Godot.Collections.Array<int> datas)
     {
         Love = datas[0];
@@ -301,6 +327,8 @@ public partial class Player: Node
 
     public void Restart() //Call at each begin of game
     {
+        Love = 0;
+        Power = 0;
         MyDeck.Restart();
         MyHand.InitCards(Id);
     }

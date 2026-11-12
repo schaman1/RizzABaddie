@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cgngbupmoydaj" path="res://scenes/hand_display.tscn" id="7_0tnpc"]
 [ext_resource type="PackedScene" uid="uid://bddxqthuqyjxe" path="res://scenes/Losange.tscn" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://c1wsf28ps0g7v" path="res://scenes/canvas_layer_loading.tscn" id="10_vtaks"]
+[ext_resource type="Texture2D" uid="uid://b2swp57i0ipx2" path="res://assets/Ground.jpg" id="11_kvpfn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
 bg_color = Color(1, 0.35686275, 0.35686275, 1)
@@ -240,10 +241,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
 
 [node name="Players" type="HBoxContainer" parent="CanvasLayerCard/MarginContainerBorder" unique_id=586711297]
 custom_maximum_size = Vector2(800, -1)
@@ -254,7 +255,7 @@ theme_override_constants/separation = 16
 alignment = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="CanvasLayerCard/MarginContainerBorder" unique_id=1744335086]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 1
@@ -273,10 +274,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 300
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_right = 300
-theme_override_constants/margin_bottom = 100
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 40
 
 [node name="PlayerContainer" parent="CanvasLayerCard/MarginContainerCenter" unique_id=2042746711 instance=ExtResource("3_lnu2h")]
 layout_mode = 2
@@ -285,8 +286,8 @@ size_flags_vertical = 8
 
 [node name="WhatChose" type="Control" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1409862653]
 visible = false
-custom_minimum_size = Vector2(150, 100)
-custom_maximum_size = Vector2(150, 100)
+custom_minimum_size = Vector2(75, 50)
+custom_maximum_size = Vector2(75, 50)
 propagate_maximum_size = true
 layout_mode = 2
 size_flags_horizontal = 8
@@ -306,7 +307,7 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Draw"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -320,8 +321,8 @@ offset_bottom = 99.0
 texture = ExtResource("2_lbhrr")
 
 [node name="ButtonDraw" type="Control" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1883296518]
-custom_minimum_size = Vector2(150, 100)
-custom_maximum_size = Vector2(150, 100)
+custom_minimum_size = Vector2(75, 50)
+custom_maximum_size = Vector2(75, 50)
 propagate_maximum_size = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -341,7 +342,7 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Draw"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -360,8 +361,8 @@ texture_focused = ExtResource("2_lbhrr")
 stretch_mode = 0
 
 [node name="ButtonQuit" type="Control" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1877687592]
-custom_minimum_size = Vector2(150, 100)
-custom_maximum_size = Vector2(150, 100)
+custom_minimum_size = Vector2(75, 50)
+custom_maximum_size = Vector2(75, 50)
 propagate_maximum_size = true
 layout_mode = 2
 size_flags_horizontal = 8
@@ -381,7 +382,7 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Quit"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -400,8 +401,8 @@ texture_focused = ExtResource("2_lbhrr")
 stretch_mode = 0
 
 [node name="Deck" type="ColorRect" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1105697441]
-custom_minimum_size = Vector2(100, 150)
-custom_maximum_size = Vector2(100, 150)
+custom_minimum_size = Vector2(50, 75)
+custom_maximum_size = Vector2(50, 75)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -416,7 +417,7 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 16
 text = "Deck"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -429,11 +430,12 @@ visible = false
 z_index = 2
 
 [node name="Hand" parent="CanvasLayerCard" unique_id=780428763 instance=ExtResource("7_0tnpc")]
-custom_minimum_size = Vector2(0, 150)
-offset_left = 176.0
-offset_top = -100.0
-offset_right = -176.0
-offset_bottom = 50.0
+custom_minimum_size = Vector2(0, 75)
+custom_maximum_size = Vector2(400, -1)
+offset_left = 90.0
+offset_top = -40.0
+offset_right = -90.0
+offset_bottom = 35.000244
 theme_override_constants/separation = -10
 alignment = 1
 
@@ -449,3 +451,15 @@ spawn_path = NodePath("..")
 
 [node name="TimerShowCards" type="Timer" parent="." unique_id=1781158152]
 wait_time = 1.5
+
+[node name="CanvasLayerSprite" type="CanvasLayer" parent="." unique_id=2071936129]
+visible = false
+
+[node name="Parallax2D" type="Parallax2D" parent="CanvasLayerSprite" unique_id=1874869469]
+repeat_size = Vector2(409.6, 409.6)
+repeat_times = 2
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayerSprite/Parallax2D" unique_id=1355892579]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("11_kvpfn")

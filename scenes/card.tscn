@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bpexkprm62fiu" path="res://scripts/Card.cs" id="1_d81rb"]
 
 [node name="Control" type="Control" unique_id=1957760092 node_paths=PackedStringArray("TextLabel")]
-custom_minimum_size = Vector2(100, 150)
-custom_maximum_size = Vector2(100, 150)
+custom_minimum_size = Vector2(50, 75)
+custom_maximum_size = Vector2(50, 75)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,10 +33,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
 [node name="ColorRect2" type="ColorRect" parent="MarginContainer" unique_id=847330669]
 layout_mode = 2
@@ -46,6 +46,6 @@ color = Color(0.2520276, 0.25202766, 0.25202763, 1)
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 7
 text = "CardName"
 autowrap_mode = 2

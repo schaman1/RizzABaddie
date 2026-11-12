@@ -28,14 +28,18 @@ public partial class Card : Control
 		if(@event is InputEventMouseButton eventMouseButton){
 
 			if(eventMouseButton.IsPressed() && eventMouseButton.ButtonIndex == MouseButton.Left && CurrentState == State.Hover){
-				if(GlobalPosition.X <= eventMouseButton.Position.X && GlobalPosition.X+Size.X >= eventMouseButton.Position.X)
+				if (GetGlobalRect().HasPoint(GetGlobalMousePosition()))
 				{
-					if(GlobalPosition.Y <= eventMouseButton.Position.Y && GlobalPosition.Y+Size.Y >= eventMouseButton.Position.Y)
-					{
-						CurrentState = State.Played;
-						EmitSignal(SignalName.OnClick,IdxList);
-					}
+					EmitSignal(SignalName.OnClick,IdxList);
 				}
+				// if(GlobalPosition.X <= eventMouseButton.GlobalPosition.X && GlobalPosition.X+Size.X >= eventMouseButton.GlobalPosition.X)
+				// {
+				// 	if(GlobalPosition.Y <= eventMouseButton.GlobalPosition.Y && GlobalPosition.Y+Size.Y >= eventMouseButton.GlobalPosition.Y)
+				// 	{
+				// 		CurrentState = State.Played;
+				// 		EmitSignal(SignalName.OnClick,IdxList);
+				// 	}
+				// }
 			}
 		}
 
@@ -43,17 +47,22 @@ public partial class Card : Control
 		{
 			if(CurrentState == State.Normal)
 			{
-				if(GlobalPosition.X <= eventMouseMotion.Position.X && GlobalPosition.X+Size.X >= eventMouseMotion.Position.X)
+				if (GetGlobalRect().HasPoint(GetGlobalMousePosition()))
 				{
-					if(GlobalPosition.Y <= eventMouseMotion.Position.Y && GlobalPosition.Y+Size.Y >= eventMouseMotion.Position.Y)
-					{
-						EmitSignal(SignalName.OnHover,IdxList);
-					}
+					EmitSignal(SignalName.OnHover,IdxList);
 				}
+				// if(GlobalPosition.X <= eventMouseMotion.GlobalPosition.X && GlobalPosition.X+Size.X >= eventMouseMotion.GlobalPosition.X)
+				// {
+				// 	if(GlobalPosition.Y <= eventMouseMotion.GlobalPosition.Y && GlobalPosition.Y+Size.Y >= eventMouseMotion.GlobalPosition.Y)
+				// 	{
+				// 		EmitSignal(SignalName.OnHover,IdxList);
+				// 	}
+				// }
 			}
 			if(CurrentState == State.Hover)
 			{
-				if(GlobalPosition.X > eventMouseMotion.Position.X || GlobalPosition.X+Size.X < eventMouseMotion.Position.X || GlobalPosition.Y > eventMouseMotion.Position.Y || GlobalPosition.Y+Size.Y < eventMouseMotion.Position.Y)
+				if(!GetGlobalRect().HasPoint(GetGlobalMousePosition()))
+				//if(GlobalPosition.X > eventMouseMotion.GlobalPosition.X || GlobalPosition.X+Size.X < eventMouseMotion.GlobalPosition.X || GlobalPosition.Y > eventMouseMotion.GlobalPosition.Y || GlobalPosition.Y+Size.Y < eventMouseMotion.GlobalPosition.Y)
 				{
 					EmitSignal(SignalName.OnStopHover,IdxList);
 				}

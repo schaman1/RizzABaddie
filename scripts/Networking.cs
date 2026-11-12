@@ -60,6 +60,9 @@ public partial class Networking : Node
 	//Static !important
 	public static Networking Instance {get;set;}
 
+	enum State {InGame,InMenu};
+	State CurrentState = State.InMenu; 
+
 	public override void _Ready()
 	{
 		if (USE_STEAM)
@@ -105,7 +108,24 @@ public partial class Networking : Node
 
 	public void RestartGame()
 	{
-		SetLobbyPublic();
+		if (IsHost)
+		{
+			SetLobbyPublic();
+			PlayersInfo.SetPlayersNotInManche();
+		}
+		else
+		{
+			RpcId(1,nameof(PlayerWaitRestart),Multiplayer.GetUniqueId());
+		}
+		
+		foreach(Player player in PlayersInfo.PlayerDic.Values)
+		{
+			if (player.HasBeenDisconnected())
+			{
+				PlayersInfo.PlayerDic.Remove(player.Id);
+			}
+		}
+		CurrentState = State.InMenu;
 	}
 
 	//Without Steam
@@ -233,11 +253,11 @@ public partial class Networking : Node
 		}
 		else
 		{
-			PlayersInfo.PlayerDic[Id].SetDisconnected();
 			if (IsHost)
 			{
 				RpcId(1,nameof(SendActionToHost),(int)Actions.Quit,Id);
 				Rpc(nameof(SetPeerHasPlay),Id);
+				Rpc(nameof(SetDisconnected),Id);
 				EmitSignal(SignalName.PeerPlay,Id);//Server has to do it itself as calllocal = false;
 			}
 			EmitSignal(SignalName.OnPlayerRemove,Id);
@@ -245,6 +265,24 @@ public partial class Networking : Node
 	}
 
 	//Rpc
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void PlayerWaitRestart(long PeerId)
+	{
+		PlayersInfo.SetNotInManche(PeerId);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void SetDisconnected(long PeerId)
+	{
+		if(CurrentState == State.InGame)
+		{
+			PlayersInfo.PlayerDic[PeerId].SetDisconnected();
+		}
+		else
+		{
+			PlayersInfo.PlayerDic.Remove(PeerId);
+		}
+	}
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void GetPeerIdPseudo() //GetPlayerPseudo + Call create player 
 	{
@@ -266,6 +304,8 @@ public partial class Networking : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void LoadSceneGame()
 	{
+		CurrentState = State.InGame;
+
 		foreach(Player player in PlayersInfo.PlayerDic.Values)
 		{
 			if (player.HasBeenDisconnected())
@@ -470,10 +510,8 @@ public partial class Networking : Node
 	public void StartGame()
 	{
 		CurrentManche = 0;
-		foreach(Player player in PlayersInfo.PlayerDic.Values)
-		{
-			player.Restart();
-		}
+		PlayersInfo.Restart();
+		GD.Print("Start Game");
 		StartManche();
 	}
 	public void StartManche()

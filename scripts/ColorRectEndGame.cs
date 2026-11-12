@@ -50,6 +50,7 @@ public partial class ColorRectEndGame : ColorRect
 		}
 		else
 		{
+			Networking.Instance.RestartGame();
 			GetTree().ChangeSceneToPacked(ClientScene);
 		}
 	}
