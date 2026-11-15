@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://by7rugmnx33h6"]
 
 [ext_resource type="Script" uid="uid://dyabicf6hykn3" path="res://scripts/Game.cs" id="1_lnu2h"]
-[ext_resource type="Texture2D" uid="uid://bjt8ihp26foga" path="res://assets/Losange.png" id="2_lbhrr"]
+[ext_resource type="Texture2D" uid="uid://bjt8ihp26foga" path="res://assets/Furniture/Losange.png" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://ddc0ra33rwdc8" path="res://scenes/add_value.tscn" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://do368oih3yt64" path="res://scenes/week.tscn" id="3_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="3_lnu2h"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://bddxqthuqyjxe" path="res://scenes/Losange.tscn" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://c1wsf28ps0g7v" path="res://scenes/canvas_layer_loading.tscn" id="10_vtaks"]
 [ext_resource type="Texture2D" uid="uid://b2swp57i0ipx2" path="res://assets/Ground.jpg" id="11_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://bhmit0whrel2i" path="res://scenes/player.tscn" id="12_dinhu"]
+[ext_resource type="PackedScene" uid="uid://deqeickwri2jw" path="res://scenes/play_area.tscn" id="13_kvuet"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
 bg_color = Color(1, 0.35686275, 0.35686275, 1)
@@ -213,14 +215,14 @@ _data = {
 &"Reset": SubResource("Animation_iywne")
 }
 
-[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "NodeEndGame", "LosangeYOrNo", "LayerLoading")]
+[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "NodeEndGame", "LosangeYOrNo", "LayerLoading", "Spawner", "CardPlayArea")]
 script = ExtResource("1_lnu2h")
 ButtonQuit = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonQuit/TextureButton")
 ButtonDraw = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonDraw/TextureButton")
 Animation = NodePath("AnimationPlayer")
 LabelActionChoose = NodePath("CanvasLayerCard/MarginContainerCenter/WhatChose/LabelActionChoose")
 LabelDeck = NodePath("CanvasLayerCard/MarginContainerCenter/Deck/LabelDeck")
-PlayerContainer = NodePath("CanvasLayerCard/MarginContainerBorder/Players")
+PlayerContainer = NodePath("CanvasLayerCard/MarginContainerCenter/Players")
 PlayerPackedScene = ExtResource("3_lnu2h")
 MyPlayer = NodePath("CanvasLayerCard/MarginContainerCenter/PlayerContainer")
 TimerShowActions = NodePath("TimerShowCards")
@@ -230,8 +232,11 @@ Hand = NodePath("CanvasLayerCard/Hand")
 NodeEndGame = NodePath("CanvasLayerCard/ColorRectEndGame")
 AddValuePackedScene = ExtResource("3_iywne")
 MainScene = ExtResource("4_u5sy4")
+PlayerScene = ExtResource("12_dinhu")
 LosangeYOrNo = NodePath("CanvasLayerCard/MarginContainerCenter/YesOrNo")
 LayerLoading = NodePath("CanvasLayerLoading")
+Spawner = NodePath("MultiplayerSpawner")
+CardPlayArea = NodePath("PlayArea")
 
 [node name="CanvasLayerCard" type="CanvasLayer" parent="." unique_id=1667825297]
 
@@ -241,18 +246,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 25
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 25
-
-[node name="Players" type="HBoxContainer" parent="CanvasLayerCard/MarginContainerBorder" unique_id=586711297]
-custom_maximum_size = Vector2(800, -1)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_constants/separation = 16
-alignment = 1
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 50
 
 [node name="ProgressBar" type="ProgressBar" parent="CanvasLayerCard/MarginContainerBorder" unique_id=1744335086]
 custom_minimum_size = Vector2(20, 0)
@@ -274,10 +271,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 120
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 120
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 150
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 150
+theme_override_constants/margin_bottom = 10
+
+[node name="Players" type="HBoxContainer" parent="CanvasLayerCard/MarginContainerCenter" unique_id=586711297]
+custom_maximum_size = Vector2(800, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 16
+alignment = 1
 
 [node name="PlayerContainer" parent="CanvasLayerCard/MarginContainerCenter" unique_id=2042746711 instance=ExtResource("3_lnu2h")]
 layout_mode = 2
@@ -326,7 +331,7 @@ custom_maximum_size = Vector2(75, 50)
 propagate_maximum_size = true
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 4
+size_flags_vertical = 8
 
 [node name="Label" type="Label" parent="CanvasLayerCard/MarginContainerCenter/ButtonDraw" unique_id=2053732966]
 z_index = 1
@@ -366,7 +371,7 @@ custom_maximum_size = Vector2(75, 50)
 propagate_maximum_size = true
 layout_mode = 2
 size_flags_horizontal = 8
-size_flags_vertical = 4
+size_flags_vertical = 8
 
 [node name="Label" type="Label" parent="CanvasLayerCard/MarginContainerCenter/ButtonQuit" unique_id=1895307441]
 z_index = 1
@@ -401,6 +406,7 @@ texture_focused = ExtResource("2_lbhrr")
 stretch_mode = 0
 
 [node name="Deck" type="ColorRect" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1105697441]
+visible = false
 custom_minimum_size = Vector2(50, 75)
 custom_maximum_size = Vector2(50, 75)
 layout_mode = 2
@@ -423,6 +429,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="YesOrNo" parent="CanvasLayerCard/MarginContainerCenter" unique_id=1208364010 instance=ExtResource("7_vtaks")]
+visible = false
 layout_mode = 2
 
 [node name="ColorRectEndGame" parent="CanvasLayerCard" unique_id=1390121789 instance=ExtResource("5_p57ef")]
@@ -447,19 +454,22 @@ root_node = NodePath("../CanvasLayerCard/MarginContainerCenter/ButtonQuit/Label"
 libraries/ = SubResource("AnimationLibrary_lbhrr")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1582407174]
+_spawnable_scenes = PackedStringArray("uid://bhmit0whrel2i")
 spawn_path = NodePath("..")
 
 [node name="TimerShowCards" type="Timer" parent="." unique_id=1781158152]
 wait_time = 1.5
 
-[node name="CanvasLayerSprite" type="CanvasLayer" parent="." unique_id=2071936129]
-visible = false
-
-[node name="Parallax2D" type="Parallax2D" parent="CanvasLayerSprite" unique_id=1874869469]
-repeat_size = Vector2(409.6, 409.6)
-repeat_times = 2
-follow_viewport = false
-
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayerSprite/Parallax2D" unique_id=1355892579]
-scale = Vector2(0.4, 0.4)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1412078734]
+texture_repeat = 2
 texture = ExtResource("11_kvpfn")
+region_enabled = true
+region_rect = Rect2(2.73, 0, 2500, 2500)
+
+[node name="PlayArea" parent="." unique_id=85647742 instance=ExtResource("13_kvuet")]
+offset_left = 560.0
+offset_top = -1.0
+offset_right = 560.0
+offset_bottom = -1.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1913373355]

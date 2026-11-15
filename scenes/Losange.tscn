@@ -5,13 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://cidyn7jgcucyt" path="res://assets/LosangeBlue.png" id="2_7o3q5"]
 
 [node name="YesOrNo" type="Control" unique_id=1208364010 node_paths=PackedStringArray("label", "TimerShow")]
-visible = false
 z_index = 1
-custom_minimum_size = Vector2(400, 260)
-custom_maximum_size = Vector2(400, 260)
+custom_minimum_size = Vector2(200, 130)
+custom_maximum_size = Vector2(200, 130)
 propagate_maximum_size = true
 layout_mode = 3
 anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 260.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_7o3q5")
@@ -33,7 +34,7 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_56yk8")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "Yes"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -42,8 +43,8 @@ vertical_alignment = 1
 layout_mode = 0
 offset_left = 1.0
 offset_top = -1.0
-offset_right = 151.0
-offset_bottom = 99.0
+offset_right = 401.0
+offset_bottom = 259.0
 texture = ExtResource("2_7o3q5")
 
 [node name="TimerShow" type="Timer" parent="." unique_id=746681099]

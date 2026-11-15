@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjt8ihp26foga"
-path="res://.godot/imported/Losange.png-f1a751cc24122cf5a5d60980ca8e5cf1.ctex"
+uid="uid://bipwd7p1xn2d"
+path="res://.godot/imported/canap.png-49bd4487864f9a912c40c31455c6f27b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Losange.png"
-dest_files=["res://.godot/imported/Losange.png-f1a751cc24122cf5a5d60980ca8e5cf1.ctex"]
+source_file="res://assets/Furniture/canap.png"
+dest_files=["res://.godot/imported/canap.png-49bd4487864f9a912c40c31455c6f27b.ctex"]
 
 [params]
 

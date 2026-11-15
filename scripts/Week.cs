@@ -34,11 +34,11 @@ public partial class Week : VBoxContainer
 		{
 			if (i == IdxDay)
 			{
-				DaysOfWeek[i].Modulate = ColorVisible;
+				DaysOfWeek[i].Set("theme_override_colors/font_color",ColorVisible);
 			}
 			else
 			{
-				DaysOfWeek[i].Modulate = ColorHidden;
+				DaysOfWeek[i].Set("theme_override_colors/font_color",ColorHidden);
 			}
 		}
 	}

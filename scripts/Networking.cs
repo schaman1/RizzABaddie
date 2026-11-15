@@ -16,6 +16,7 @@ public partial class Networking : Node
 	[Signal] public delegate void CodeNotFoundEventHandler();
 	[Signal] public delegate void ConnectionSuccessEventHandler();
 	[Signal] public delegate void AllPeerLoadGameSceneEventHandler();
+	[Signal] public delegate void StartCardGameEventHandler();
 	[Signal] public delegate void RoundFinishEventHandler();
 	[Signal] public delegate void MancheStartEventHandler();
 	[Signal] public delegate void MancheFinishShopStartEventHandler();
@@ -27,6 +28,7 @@ public partial class Networking : Node
 	[Signal] public delegate void OnCardPlayEventHandler(int CardId,Godot.Collections.Array<int> CardInfo); //When want to get existing players
 
 	public string GameScene = "res://scenes/game.tscn";
+	private string PlayerScene = "res://scenes/player.tscn";
 	private int CurrentManche = 0;
 	private int NbrMaxManchePerGame = 3;
 
@@ -560,7 +562,27 @@ public partial class Networking : Node
 		}
 
 		await ToSignal(this,SignalName.PlayersInitiated);
-
 	}
 
+	public void PlayerFoundBaddie(long PeerId,List<Vector2> ListPositionsPlayers)
+	{
+		//Verif si vrm proche de baddie ?
+		int i = 0;
+		foreach(Player player in PlayersInfo.PlayerDic.Values)
+		{
+			if (ListPositionsPlayers.Count <= i)
+			{
+				GD.PushError("Not enough Marker for players");
+			}
+
+			RpcId(player.Id,nameof(SendPlayerFoundBaddie),ListPositionsPlayers[i]);
+			i++;
+		}
+;		
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void SendPlayerFoundBaddie(Vector2 NewPosition)
+	{
+		EmitSignal(SignalName.StartCardGame,NewPosition);
+	}
 }

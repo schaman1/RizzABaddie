@@ -15,9 +15,9 @@ public partial class Main : Node2D
 
 	public override void _Ready()
 	{
-		Networking.Instance.HostCreated += OnHostCreate;
-		Networking.Instance.CodeNotFound += OnCodeNotFound;
-		Networking.Instance.ConnectionSuccess += OnConnectionSuccess;
+		Networking.Instance.Connect(nameof(Networking.Instance.HostCreated),Callable.From(OnHostCreate));
+		Networking.Instance.Connect(nameof(Networking.Instance.CodeNotFound),Callable.From(OnCodeNotFound));
+		Networking.Instance.Connect(nameof(Networking.Instance.ConnectionSuccess),Callable.From(OnConnectionSuccess));
 		ButtonHost.Pressed += OnHostButtonPressed;
 		ButtonJoin.Pressed += OnJoinButtonPressed;
 	}

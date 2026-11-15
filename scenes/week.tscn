@@ -11,54 +11,54 @@ offset_right = 160.0
 grow_vertical = 2
 alignment = 1
 script = ExtResource("1_35v4v")
-ColorHidden = Color(0.49747366, 0.49747366, 0.49747366, 0.49803922)
+ColorHidden = Color(0, 0, 0, 1)
 ColorVisible = Color(1, 1, 1, 1)
 
 [node name="LabelMonday" type="Label" parent="." unique_id=396535927]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "MONDAY"
 
 [node name="LabelTuesday" type="Label" parent="." unique_id=1849381822]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "TUESDAY"
 
 [node name="LabelWednesday" type="Label" parent="." unique_id=750154001]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "WEDNESDAY"
 
 [node name="LabelThursday" type="Label" parent="." unique_id=1322477909]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "THURSDAY"
 
 [node name="LabelFriday" type="Label" parent="." unique_id=1117123552]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "FRIDAY"
 
 [node name="LabelSatudray" type="Label" parent="." unique_id=859763019]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "SATURDAY"
 
 [node name="LabelSunday" type="Label" parent="." unique_id=2001993747]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("1_ba17h")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "SUNDAY"

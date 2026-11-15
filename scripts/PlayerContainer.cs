@@ -9,20 +9,17 @@ public partial class PlayerContainer : Godot.MarginContainer
 	[Export]Label LabelName;
 	[Export]Label LabelLove;
 	//[Export]Label LabelPower;
-	[Export]public Color ColorActive;
-	[Export]public Color ColorPassive;
+	//[Export]public Color ColorActive;
+	//[Export]public Color ColorPassive;
 	[Export]public Color DisconnectedColor;
-	[Export]ColorRect BorderColorRect;
 	[Export]ColorRect HasPlayedColorRect;
-	[Export]ColorRect BgColorRect;
 
 	public string name = "Player";
 	public int Love = 0;
 	public int power = 0;
-	public bool Initiate = false;
+	//public bool Initiate = false;
 	public override void _Ready()
 	{
-		BorderColorRect.Color = ColorPassive;
 		HasPlayedColorRect.Visible = false;
 	}
 
@@ -40,7 +37,7 @@ public partial class PlayerContainer : Godot.MarginContainer
 
 	public void Init(long _Id,String _name,int _Love,int new_power = 0)
 	{
-		Initiate = true;
+		//Initiate = true;
 		name = _name;
 		Love = _Love;
 		power = new_power;
@@ -55,16 +52,16 @@ public partial class PlayerContainer : Godot.MarginContainer
 
 	public void SetColorDisconnected()
 	{
-		BgColorRect.Color = DisconnectedColor;
+		LabelName.Set("theme_override_colors/font_color",DisconnectedColor);
 	}
 
 	public void Active()
 	{
-		BorderColorRect.Color = ColorActive;
+		return;
 	}
 	public void Passive()
 	{
-		BorderColorRect.Color = ColorPassive;
+		return;
 	}
 
 	public void Reset()

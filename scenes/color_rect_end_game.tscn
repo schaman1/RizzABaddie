@@ -30,7 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_cp6s8")
-theme_override_font_sizes/font_size = 128
+theme_override_font_sizes/font_size = 64
 text = "WIN / LOOSE"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -42,29 +42,29 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 200
-theme_override_constants/margin_right = 200
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 25
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=460302904]
-custom_maximum_size = Vector2(-1, 100)
+custom_maximum_size = Vector2(-1, 50)
 layout_mode = 2
 size_flags_vertical = 8
 alignment = 1
 
 [node name="ButtonRestart" type="Button" parent="MarginContainer/HBoxContainer" unique_id=940660020]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
 theme_override_fonts/font = ExtResource("1_cp6s8")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "RESTART"
 
 [node name="ButtonQuit" type="Button" parent="MarginContainer/HBoxContainer" unique_id=2042936363]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = ExtResource("1_cp6s8")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "QUIT"

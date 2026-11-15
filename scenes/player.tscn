@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://bhmit0whrel2i"]
 
 [ext_resource type="Texture2D" uid="uid://b6ulxauclhwsi" path="res://assets/Sans titre.png" id="1_3vyb7"]
-[ext_resource type="Script" uid="uid://voxsp74objae" path="res://scripts/Player.cs" id="1_g2els"]
+[ext_resource type="Script" uid="uid://b3a6xqpvlil2f" path="res://scripts/PlayerCharacter.cs" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="4_dqkch"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tii7q"]
+radius = 8.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_tii7q"]
 animations = [{
@@ -16,11 +18,30 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D" unique_id=472399375]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g2els"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Player" type="CharacterBody2D" unique_id=472399375 node_paths=PackedStringArray("camera", "Container")]
 script = ExtResource("1_g2els")
+camera = NodePath("Camera2D")
+Container = NodePath("PlayerContainer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=867325193]
 shape = SubResource("CapsuleShape2D_tii7q")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=980573433]
 sprite_frames = SubResource("SpriteFrames_tii7q")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=11002052]
+position_smoothing_enabled = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1591277963]
+replication_config = SubResource("SceneReplicationConfig_g2els")
+
+[node name="PlayerContainer" parent="." unique_id=97836628 instance=ExtResource("4_dqkch")]
+offset_left = -31.0
+offset_top = -42.0
+offset_right = 29.0
+offset_bottom = -16.0

@@ -34,14 +34,19 @@ public partial class Game : Node2D
 	[Export] ColorRectEndGame NodeEndGame;
 	[Export]private PackedScene AddValuePackedScene;
 	[Export]private PackedScene MainScene;
+	[Export]private PackedScene PlayerScene;
 	[Export]Losange LosangeYOrNo;
 	[Export]CanvasLayerLoading LayerLoading;
+	[Export]MultiplayerSpawner Spawner;
+	[Export]PlayArea CardPlayArea;
 	private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
+	private Dictionary<long,PlayerCharacter> PlayersCharacter = new  Dictionary<long,PlayerCharacter>();
 	private PlayerContainer CurrentActivePlayerContainer = null;
 	public PlayersInfoClass players_dico;
 	int idx_player_display = 0;
 	int LastPlayerIdxAdded = 0;
 	int IdxOfManche = -1; //-1 car start manche = set to 0;
+	int NbrOfPlayerSpawned = 0;
 
 	enum State {ChooseAction,WaitForOther,Reveal,RevealEndManche};
 	State CurrentState = State.ChooseAction;
@@ -56,6 +61,7 @@ public partial class Game : Node2D
 		LayerLoading.Show();
 
 		ButtonQuit.Connect("pressed",Callable.From(QuitPressed));
+		Spawner.Connect("spawned",Callable.From<Node>(OnPlayerSpawned));
 		ButtonDraw.Connect("pressed",Callable.From(DrawPressed));
 
 		TimerShowActions.Timeout += ShowActionPlayer;
@@ -71,17 +77,19 @@ public partial class Game : Node2D
 		Networking.Instance.Connect(nameof(Networking.Instance.OnPlayerRemove),Callable.From<long>(RemovePlayer));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnHostDisconnected),Callable.From(OnHostDisconnected));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnCardPlay),Callable.From<int,Godot.Collections.Array<int>>(PlayCard));
-		
-		InitPlayers();
-		Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId());
+		Networking.Instance.Connect(nameof(Networking.Instance.StartCardGame),Callable.From<Vector2>(StartCardGame));
+
+		if (Multiplayer.IsServer())
+		{
+			InitPlayers();
+		}
 		//StartManche(); //Networking don't call it for the 1st time (bcs pbl et doit await mais dur)
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _Process(double _delta)
 	{
 	}
-
 	private async void StartManche()
 	{
 		await Networking.Instance.RequestPlayersInfo(); //Get values from host
@@ -94,6 +102,8 @@ public partial class Game : Node2D
 		Animation.Play("Reset");
 		ActionChoose = Actions.Nothing;
 		Hand.ShowHand();
+		
+		GD.Print("Start Manche");
 		UpdatePlayers();
 		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
 		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
@@ -164,6 +174,24 @@ public partial class Game : Node2D
 		}
 	}
 
+	private void OnPlayerSpawned(Node node)
+	{
+		if(node is PlayerCharacter NewPlayer)
+		{
+			int Id = NewPlayer.Name.ToString().ToInt();
+			PlayersCharacter[Id] = NewPlayer; //add to list
+			
+			NewPlayer.Container.Init(Id,Networking.Instance.PlayersInfo.PlayerDic[Id].Pseudo,Networking.Instance.PlayersInfo.PlayerDic[Id].Love);
+			players[Id] = NewPlayer.Container; //Set the container
+			NbrOfPlayerSpawned++;
+			if (NbrOfPlayerSpawned == Networking.Instance.PlayersInfo.PlayerDic.Count)
+			{
+				InitPlayers(); //As all players are here
+				Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId()); //We are ready to start
+			}
+		}
+	}
+
 	private void InitPlayers()
 	{
 		players_dico = Networking.Instance.PlayersInfo;
@@ -173,6 +201,29 @@ public partial class Game : Node2D
 			String name = player.Pseudo;
 			int Love = player.Love;
 			AddPlayer(player.Id,name,Love);
+		}
+
+		if (Multiplayer.IsServer()) //If serveur, spawn each player for everyone
+		{
+			int sizePlayerX = 200;
+			int i = 0;
+			foreach(Player player in players_dico.PlayerDic.Values)
+			{
+				PlayerCharacter NewPlayer = (PlayerCharacter) PlayerScene.Instantiate();
+				NewPlayer.Name = player.Id.ToString();
+				PlayersCharacter[player.Id] = NewPlayer;
+
+				NewPlayer.Container.Init(player.Id,player.Pseudo,player.Love);
+				players[player.Id] = NewPlayer.Container; //Set the container
+
+				//Set the position of the player
+				Vector2 NewPosition = Vector2.Zero;
+				NewPosition.X = -sizePlayerX*i;
+				NewPlayer.Position = NewPosition;
+				i++;
+				AddChild(NewPlayer);
+			}
+			Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId());
 		}
 
 		Hand.Init();
@@ -187,16 +238,16 @@ public partial class Game : Node2D
 
 		else
 		{
-			PlayerContainer new_player = (PlayerContainer)PlayerPackedScene.Instantiate();
-			new_player.Init(Id,name,Love);
-			players[Id] = new_player;
-			PlayerContainer.AddChild(new_player);
+			// PlayerContainer new_player = (PlayerContainer)PlayerPackedScene.Instantiate();
+			// new_player.Init(Id,name,Love);
+			// players[Id] = new_player;
+			// PlayerContainer.AddChild(new_player);
 
-			if (MyPlayer.Initiate)
-			{
-				PlayerContainer.MoveChild(new_player,LastPlayerIdxAdded);
-				LastPlayerIdxAdded+=1;
-			}
+			// if (MyPlayer.Initiate)
+			// {
+			// 	PlayerContainer.MoveChild(new_player,LastPlayerIdxAdded);
+			// 	LastPlayerIdxAdded+=1;
+			// }
 		}
 	}
 
@@ -380,5 +431,11 @@ public partial class Game : Node2D
 		{
 			LosangeYOrNo.ShowYesOrNo(CardInfo[0]);
 		}
+	}
+
+	private void StartCardGame(Vector2 NewPosition)
+	{
+		PlayersCharacter[Multiplayer.GetUniqueId()].SetInCardGame(NewPosition);
+		CardPlayArea.StartCardGame();
 	}
 }
