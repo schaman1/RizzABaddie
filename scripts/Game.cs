@@ -30,7 +30,8 @@ public partial class Game : Node2D
 	[Export] Timer TimerShowActions;
 	[Export] ProgressBar ProbaDieProgressBar;
 	[Export] Week WeekBoxContainer;
-	[Export]HandDisplay Hand;
+	[Export] HandDisplay Hand;
+	[Export] MarginContainer CardGameMarginContainer;
 	[Export] ColorRectEndGame NodeEndGame;
 	[Export]private PackedScene AddValuePackedScene;
 	[Export]private PackedScene MainScene;
@@ -39,6 +40,8 @@ public partial class Game : Node2D
 	[Export]CanvasLayerLoading LayerLoading;
 	[Export]MultiplayerSpawner Spawner;
 	[Export]PlayArea CardPlayArea;
+	[Export]SpawnArea UpgradeSpawnArea;
+	[Export]AnimPlayerFoundBaddie DisplayPseudoFoundBaddie;
 	private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
 	private Dictionary<long,PlayerCharacter> PlayersCharacter = new  Dictionary<long,PlayerCharacter>();
 	private PlayerContainer CurrentActivePlayerContainer = null;
@@ -67,17 +70,16 @@ public partial class Game : Node2D
 		TimerShowActions.Timeout += ShowActionPlayer;
 
 		MyId = Multiplayer.GetUniqueId();
-		//Networking.Instance.PlayersChanged += UpdatePlayers;
 		Networking.Instance.Connect(nameof(Networking.Instance.RoundFinish),Callable.From(RoundFinish));
 		Networking.Instance.Connect(nameof(Networking.Instance.MancheFinishShopStart),Callable.From(MancheFinish));
-		Networking.Instance.Connect(nameof(Networking.Instance.MancheStart),Callable.From(StartManche));
+		Networking.Instance.Connect(nameof(Networking.Instance.MancheStart),Callable.From<int>(StartManche));
 		Networking.Instance.Connect(nameof(Networking.Instance.PeerPlay),Callable.From<int>(PeerPlay)); //Idk how to do it
 		Networking.Instance.Connect(nameof(Networking.Instance.ProbaToSet),Callable.From<float>(SetProbaDie));
 		Networking.Instance.Connect(nameof(Networking.Instance.EndGame),Callable.From<bool>(EndGame));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnPlayerRemove),Callable.From<long>(RemovePlayer));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnHostDisconnected),Callable.From(OnHostDisconnected));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnCardPlay),Callable.From<int,Godot.Collections.Array<int>>(PlayCard));
-		Networking.Instance.Connect(nameof(Networking.Instance.StartCardGame),Callable.From<Vector2>(StartCardGame));
+		Networking.Instance.Connect(nameof(Networking.Instance.StartCardGame),Callable.From<int,long>(StartCardGame));
 
 		if (Multiplayer.IsServer())
 		{
@@ -90,21 +92,20 @@ public partial class Game : Node2D
 	public override void _Process(double _delta)
 	{
 	}
-	private async void StartManche()
+	private async void StartManche(int IdxSPawn)
 	{
 		await Networking.Instance.RequestPlayersInfo(); //Get values from host
 
 		//await Task.Delay(TimeSpan.FromMilliseconds(1000));
-		
+		HideCardContainer();
 		LayerLoading.Hide();
 		IdxOfManche+=1;
 		CurrentState = State.ChooseAction;
 		Animation.Play("Reset");
 		ActionChoose = Actions.Nothing;
-		Hand.ShowHand();
 		
 		GD.Print("Start Manche");
-		UpdatePlayers();
+		UpdatePlayers(IdxSPawn);
 		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
 		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
 		ResetHasPlayerPlayerBeginManche();
@@ -132,6 +133,7 @@ public partial class Game : Node2D
 	}
 	private void SetTextQuitOrDraw(Actions Action)
 	{
+		GD.Print("Btn pressed");
 		if(CurrentState == State.ChooseAction)
 		{
 			CurrentState = State.WaitForOther;
@@ -147,7 +149,8 @@ public partial class Game : Node2D
 			}
 			//In order to rpcid networking.instance.fctname il faut faire networking.instance.rpcid() le lancer depuis networking
 			Networking.Instance.SetPeerAction((int)Action);
-			MyPlayer.SetPlay();
+			PlayersCharacter[Multiplayer.GetUniqueId()].Container.SetPlay();
+			//MyPlayer.SetPlay();
 			Hand.HideHand();
 			Animation.Play("Choose");
 
@@ -155,19 +158,23 @@ public partial class Game : Node2D
 		}
 	}
 
-	private void UpdatePlayers()
+	private void UpdatePlayers(int IdxNewPos)
 	{
 		foreach(Player player in players_dico.PlayerDic.Values)
 		{
 			PlayerContainer UpdateP;
-			if(player.Id != MyId)
+			UpdateP = players[player.Id];
+			if(player.Id == MyId)
 			{
-				UpdateP = players[player.Id];
+				//Tp To new pos
+				PlayersCharacter[player.Id].GlobalPosition = UpgradeSpawnArea.SpawnPositions[IdxNewPos];
 			}
-			else
-			{
-				UpdateP = MyPlayer;
-			}
+			// {
+			// }
+			// else
+			// {
+			// 	UpdateP = MyPlayer;
+			// }
 			UpdateP.Love = player.Love;
 			UpdateP.power = player.Power;
 			UpdateP.DisplayValues();
@@ -268,7 +275,7 @@ public partial class Game : Node2D
 	private void ShowActionPlayer()
 	{
 		// For each player update its power
-		if(idx_player_display>= players.Keys.ToList().Count +1)//+1 car a le joueur qui est pas dans players.Keys
+		if(idx_player_display>= players.Keys.ToList().Count)//
 		{
 			TimerShowActions.Stop();
 			LabelDeck.Text = "Deck";
@@ -287,14 +294,14 @@ public partial class Game : Node2D
 		else
 		{
 			long id = players_dico.PlayerDic.Keys.ToList()[idx_player_display];
-			if (id == Multiplayer.GetUniqueId())
-			{
-				ChangeCurrentActivePlayerContainer(MyPlayer);
-			}
-			else
-			{
-				ChangeCurrentActivePlayerContainer(players[id]);
-			}
+			// if (id == Multiplayer.GetUniqueId())
+			// {
+			// 	ChangeCurrentActivePlayerContainer(MyPlayer);
+			// }
+			// else
+			// {
+			// }
+			ChangeCurrentActivePlayerContainer(players[id]);
 
 			ActivateCard(players_dico.PlayerDic[id]); //Deals damage to all other player
 		
@@ -311,14 +318,14 @@ public partial class Game : Node2D
 			LabelDeck.Text = "Draw\n" +PlayerInfo.CardPower.ToString();
 			CurrentActivePlayerContainer.SetNewLove(-PlayerInfo.CardPower); // - bcs bomb deals damage, no heal
 			AddValue Add = (AddValue)AddValuePackedScene.Instantiate();
-			if(PlayerInfo.Id != MyId)
-			{	
-				players[PlayerInfo.Id].AddChild(Add);
-			}
-			else
-			{
-				MyPlayer.AddChild(Add);
-			}
+			players[PlayerInfo.Id].AddChild(Add);
+			// if(PlayerInfo.Id != MyId)
+			// {	
+			// }
+			// else
+			// {
+			// 	MyPlayer.AddChild(Add);
+			// }
 			Add.Init(PlayerInfo.CardPower);
 		}
 		else if(PlayerInfo.Action == (int)Actions.Quit)
@@ -344,7 +351,7 @@ public partial class Game : Node2D
 			CurrentState = State.ChooseAction;
 			Hand.ShowHand();
 			Animation.Play("Reset");
-			MyPlayer.Reset();
+			//MyPlayer.Reset();
 		}
 		ResetHasPlayedPlayer();
 	}
@@ -353,28 +360,29 @@ public partial class Game : Node2D
 	
 		foreach(Player player in players_dico.PlayerDic.Values)
 		{
-			if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
+			// if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
+			// {
+			// }
+			if ((int)player.Action != 1)
 			{
-				if ((int)player.Action != 1)
-				{
-					players[player.Id].Reset();
-				}
+				players[player.Id].Reset();
 			}
 		}
 	}
 	public void ResetHasPlayerPlayerBeginManche()
 	{
+		CardPlayArea.StopCardGame();
 		foreach(Player player in players_dico.PlayerDic.Values)
 		{
-			if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
+			// if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
+			// {
+			// }
+			if ((int)player.CurrentState != -1) // 1 = 
 			{
-				if ((int)player.CurrentState != -1) // 1 = 
-				{
-					players[player.Id].Reset();
-				}
+				PlayersCharacter[player.Id].Reset();
 			}
 		}
-		MyPlayer.Reset();
+		//MyPlayer.Reset();
 	}
 
 	private bool CheckDrawBomb(Player player)
@@ -433,9 +441,29 @@ public partial class Game : Node2D
 		}
 	}
 
-	private void StartCardGame(Vector2 NewPosition)
+	private void StartCardGame(int IdxNewPosition,long PeerIdFoundBaddie)
 	{
-		PlayersCharacter[Multiplayer.GetUniqueId()].SetInCardGame(NewPosition);
-		CardPlayArea.StartCardGame();
+		DisplayPseudoFoundBaddie.StartAnimationPlayerFoundBaddie(Networking.Instance.PlayersInfo.PlayerDic[PeerIdFoundBaddie].Pseudo,CardPlayArea.ReturnPosition(IdxNewPosition),PlayersCharacter[Multiplayer.GetUniqueId()].SetInCardGame,CardPlayArea.StartCardGame);
+		players[PeerIdFoundBaddie].SetNewLove(-3);
+
+		AddValue Add = (AddValue)AddValuePackedScene.Instantiate();
+		players[PeerIdFoundBaddie].AddChild(Add);
+
+		Add.Init(3);		
+		
+		ShowCardContainer();
+	}
+	private void HideCardContainer()
+	{
+		Hand.HideHand();
+		CardGameMarginContainer.Hide();
+		ProbaDieProgressBar.Hide();
+	}
+	private void ShowCardContainer()
+	{
+		Hand.ShowHand();
+		CardGameMarginContainer.Show();
+		ProbaDieProgressBar.Show();
+
 	}
 }

@@ -8,6 +8,9 @@ public partial class PlayerCharacter : CharacterBody2D
 	[Export]Camera2D camera;
 	[Export]public PlayerContainer Container;
 
+	public enum State {LookingForBaddie,InCardGame}
+	public State CurrentState = State.LookingForBaddie;
+
 	public int Id = 0;
 
     public override void _EnterTree()
@@ -23,7 +26,7 @@ public partial class PlayerCharacter : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if(!IsMultiplayerAuthority()){return;}//No move
+		if(!IsMultiplayerAuthority() || CurrentState == State.InCardGame){return;}//No move
 
 		Vector2 velocity = Velocity;
 
@@ -56,9 +59,26 @@ public partial class PlayerCharacter : CharacterBody2D
 		MoveAndSlide();
 	}
 
+	public bool IsLookingForBaddie()
+	{
+		return CurrentState == State.LookingForBaddie;
+	}
+
 	public void SetInCardGame(Vector2 NewSelfPosition)
 	{
 		GlobalPosition = NewSelfPosition;
 		camera.Enabled = false;//During game, use the cardgameCamera
+		CurrentState = State.InCardGame;
+	}
+
+	public void Reset()
+	{
+		Container.Reset();
+		if(IsMultiplayerAuthority())
+		{
+			camera.Enabled = true;
+			camera.MakeCurrent();
+		}
+		CurrentState = State.LookingForBaddie;
 	}
 }

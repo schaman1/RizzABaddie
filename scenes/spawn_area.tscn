@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://24jyhsalqf61"]
+
+[ext_resource type="Texture2D" uid="uid://rve8x5845yt5" path="res://assets/Decors/grass.png" id="1_au4v6"]
+[ext_resource type="Script" uid="uid://gvr3ln34sm4g" path="res://scripts/SpawnArea.cs" id="1_uwyti"]
+
+[node name="SpawnArea" type="Control" unique_id=69254472]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uwyti")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=405206307]
+modulate = Color(0.4178962, 0.4178962, 0.4178962, 1)
+texture_repeat = 2
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_au4v6")
+region_enabled = true
+region_rect = Rect2(0, 0, 2000, 2000)
+
+[node name="1" type="Marker2D" parent="." unique_id=1228022367]
+position = Vector2(104.99999, -90.99999)
+scale = Vector2(0.2, 0.2)
+
+[node name="2" type="Marker2D" parent="." unique_id=863811677]
+position = Vector2(82.00001, 64.99999)
+scale = Vector2(0.2, 0.2)
+
+[node name="3" type="Marker2D" parent="." unique_id=589766381]
+position = Vector2(-24.999992, -11.999985)
+scale = Vector2(0.2, 0.2)
+
+[node name="4" type="Marker2D" parent="." unique_id=1378814916]
+position = Vector2(-135, -90.99999)
+scale = Vector2(0.2, 0.2)
+
+[node name="5" type="Marker2D" parent="." unique_id=2052344369]
+position = Vector2(-103, 96.99999)
+scale = Vector2(0.2, 0.2)

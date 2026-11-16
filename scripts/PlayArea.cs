@@ -32,13 +32,25 @@ public partial class PlayArea : Control
 	{
 	}
 
+	public Vector2 ReturnPosition(int IdxNewPosition)
+	{
+		return Vector2PositionsPlayers[IdxNewPosition];
+	}
+
 	public void OnPlayerFoundBaddie(long PeerId)
 	{
-		Networking.Instance.PlayerFoundBaddie(PeerId,Vector2PositionsPlayers);
+		Networking.Instance.PlayerFoundBaddie(PeerId);
 	}
 	public void StartCardGame()
 	{
 		camera.Enabled = true;
 		camera.MakeCurrent();
+		baddie.StopCollision();
+	}
+
+	public void StopCardGame()
+	{
+		camera.Enabled = false;
+		baddie.StartCollision();
 	}
 }

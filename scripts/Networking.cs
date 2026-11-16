@@ -392,9 +392,9 @@ public partial class Networking : Node
 		EmitSignal(SignalName.RoundFinish);
 	}
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
-	public void EmitStartManche()
+	public void EmitStartManche(int Idx)
 	{
-		EmitSignal(SignalName.MancheStart);
+		EmitSignal(SignalName.MancheStart,Idx);
 	}
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void EmitMancheFinish()
@@ -526,7 +526,12 @@ public partial class Networking : Node
 		{
 			player.StartManche(IdxBomb);
 		}
-		Rpc(nameof(EmitStartManche)); //Emit to all player
+		int i = 0; //The idx for the player to know where he will spawn
+		foreach(Player player in PlayersInfo.PlayerDic.Values)
+		{
+			RpcId(player.Id,nameof(EmitStartManche),i); //Emit to all player
+			i++;
+		}
 	}
 	public void StartRound()
 	{
@@ -564,25 +569,21 @@ public partial class Networking : Node
 		await ToSignal(this,SignalName.PlayersInitiated);
 	}
 
-	public void PlayerFoundBaddie(long PeerId,List<Vector2> ListPositionsPlayers)
+	public void PlayerFoundBaddie(long PeerId)
 	{
 		//Verif si vrm proche de baddie ?
 		int i = 0;
 		foreach(Player player in PlayersInfo.PlayerDic.Values)
 		{
-			if (ListPositionsPlayers.Count <= i)
-			{
-				GD.PushError("Not enough Marker for players");
-			}
 
-			RpcId(player.Id,nameof(SendPlayerFoundBaddie),ListPositionsPlayers[i]);
+			RpcId(player.Id,nameof(SendPlayerFoundBaddie),i,PeerId);
 			i++;
 		}
 ;		
 	}
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
-	public void SendPlayerFoundBaddie(Vector2 NewPosition)
+	public void SendPlayerFoundBaddie(int IdxNewPosition,long PeerIdFoundBaddie)
 	{
-		EmitSignal(SignalName.StartCardGame,NewPosition);
+		EmitSignal(SignalName.StartCardGame,IdxNewPosition,PeerIdFoundBaddie);
 	}
 }

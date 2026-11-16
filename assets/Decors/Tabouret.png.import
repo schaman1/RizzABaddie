@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dg1g6xjv2bguc"
-path="res://.godot/imported/Wall.jpg-6298fd2a227da4a128b62cfa952e0e35.ctex"
+uid="uid://cvnlpjec66fe"
+path="res://.godot/imported/Tabouret.png-653ef008c7e07628b9cadf15dd2157a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Wall.jpg"
-dest_files=["res://.godot/imported/Wall.jpg-6298fd2a227da4a128b62cfa952e0e35.ctex"]
+source_file="res://assets/Decors/Tabouret.png"
+dest_files=["res://.godot/imported/Tabouret.png-653ef008c7e07628b9cadf15dd2157a2.ctex"]
 
 [params]
 

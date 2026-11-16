@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2swp57i0ipx2"
-path="res://.godot/imported/Ground.jpg-5fba9c8027ef065ac2679fb353c9ae8a.ctex"
+uid="uid://byvxruitghyc6"
+path="res://.godot/imported/Banc.png-9f1de236b1d2fe6a3b32b3cc8ec454e7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Ground.jpg"
-dest_files=["res://.godot/imported/Ground.jpg-5fba9c8027ef065ac2679fb353c9ae8a.ctex"]
+source_file="res://assets/Decors/Banc.png"
+dest_files=["res://.godot/imported/Banc.png-9f1de236b1d2fe6a3b32b3cc8ec454e7.ctex"]
 
 [params]
 

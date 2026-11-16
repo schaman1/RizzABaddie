@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bipwd7p1xn2d"
-path="res://.godot/imported/canap.png-49bd4487864f9a912c40c31455c6f27b.ctex"
+uid="uid://dby5jlqsg5eq0"
+path="res://.godot/imported/carrelage.png-274d071f9bb278e2e67c27b643ff4bf7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Furniture/canap.png"
-dest_files=["res://.godot/imported/canap.png-49bd4487864f9a912c40c31455c6f27b.ctex"]
+source_file="res://assets/Decors/carrelage.png"
+dest_files=["res://.godot/imported/carrelage.png-274d071f9bb278e2e67c27b643ff4bf7.ctex"]
 
 [params]
 

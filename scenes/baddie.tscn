@@ -26,14 +26,16 @@ properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="Baddie" type="RigidBody2D" unique_id=2126234741 node_paths=PackedStringArray("DetectionArea", "time")]
+[node name="Baddie" type="RigidBody2D" unique_id=2126234741 node_paths=PackedStringArray("CollisionShapeDetection", "AreaDetection", "timerBeforeCanCollide")]
 script = ExtResource("1_18q4u")
-DetectionArea = NodePath("DetectionArea")
-time = NodePath("Timer")
+CollisionShapeDetection = NodePath("Area2D/DetectionArea")
+AreaDetection = NodePath("Area2D")
+timerBeforeCanCollide = NodePath("Timer")
 
-[node name="DetectionArea" type="CollisionShape2D" parent="." unique_id=957337138]
+[node name="Area2D" type="Area2D" parent="." unique_id=275043395]
+
+[node name="DetectionArea" type="CollisionShape2D" parent="Area2D" unique_id=957337138]
 shape = SubResource("CapsuleShape2D_ggaxb")
-disabled = true
 debug_color = Color(0.8279028, 0.34901837, 0.49554044, 0.41960785)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=867325193]
@@ -53,5 +55,5 @@ text = "Women"
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1591277963]
 replication_config = SubResource("SceneReplicationConfig_g2els")
 
-[node name="Timer" type="Timer" parent="." unique_id=955691587]
+[node name="Timer" type="Timer" parent="." unique_id=1203224367]
 one_shot = true

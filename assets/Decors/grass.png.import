@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dby5jlqsg5eq0"
-path="res://.godot/imported/carrelage.png-c971f43324866b143e5fe14031802488.ctex"
+uid="uid://rve8x5845yt5"
+path="res://.godot/imported/grass.png-34a3b9d481adc8ca5070feeb5a213460.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Furniture/carrelage.png"
-dest_files=["res://.godot/imported/carrelage.png-c971f43324866b143e5fe14031802488.ctex"]
+source_file="res://assets/Decors/grass.png"
+dest_files=["res://.godot/imported/grass.png-34a3b9d481adc8ca5070feeb5a213460.ctex"]
 
 [params]
 

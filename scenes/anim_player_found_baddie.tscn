@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://4iriixcobne"]
+
+[ext_resource type="Texture2D" uid="uid://cyycukauekea5" path="res://assets/TextAnimPlayerFoundBaddie.png" id="1_pwiys"]
+[ext_resource type="Script" uid="uid://ciwnqk0uabreh" path="res://scripts/AnimPlayerFoundBaddie.cs" id="1_t4e10"]
+
+[sub_resource type="Gradient" id="Gradient_t4e10"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tii7q"]
+gradient = SubResource("Gradient_t4e10")
+
+[sub_resource type="Curve2D" id="Curve2D_t4e10"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1200, 0)
+}
+point_count = 2
+
+[node name="AnimPlayerFoundBaddie" type="Control" unique_id=926121617 node_paths=PackedStringArray("text", "sprite", "path", "time", "Texture")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t4e10")
+text = NodePath("Path2D2/Path2D/TextAnimPlayerFoundBaddie/RichTextLabel")
+sprite = NodePath("Path2D2/Path2D/TextAnimPlayerFoundBaddie")
+path = NodePath("Path2D2/Path2D")
+time = NodePath("Timer")
+Texture = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=66282703]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture1D_tii7q")
+
+[node name="Path2D2" type="Path2D" parent="." unique_id=627329354]
+position = Vector2(-266.00003, 218)
+rotation = -0.13962634
+scale = Vector2(1.0091188, 0.99999994)
+curve = SubResource("Curve2D_t4e10")
+
+[node name="Path2D" type="PathFollow2D" parent="Path2D2" unique_id=2085333194]
+scale = Vector2(0.9999999, 0.9999999)
+loop = false
+
+[node name="TextAnimPlayerFoundBaddie" type="Sprite2D" parent="Path2D2/Path2D" unique_id=1655703166]
+position = Vector2(9.813202, 1.3917236)
+scale = Vector2(0.9909635, 0.9999999)
+texture = ExtResource("1_pwiys")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Path2D2/Path2D/TextAnimPlayerFoundBaddie" unique_id=1588095973]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -43.5
+offset_right = -256.0
+offset_bottom = -20.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "Player X found the girl"
+fit_content = true
+horizontal_alignment = 1
+visible_characters_behavior = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=1856080893]
+wait_time = 0.5
+one_shot = true

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvnlpjec66fe"
-path="res://.godot/imported/Tabouret.png-f8ea75a3ce6b74a6f90e996aa44673b8.ctex"
+uid="uid://bjt8ihp26foga"
+path="res://.godot/imported/Losange.png-8ac7132a8509d11deaf8656b25c3cbfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Furniture/Tabouret.png"
-dest_files=["res://.godot/imported/Tabouret.png-f8ea75a3ce6b74a6f90e996aa44673b8.ctex"]
+source_file="res://assets/Decors/Losange.png"
+dest_files=["res://.godot/imported/Losange.png-8ac7132a8509d11deaf8656b25c3cbfd.ctex"]
 
 [params]
 

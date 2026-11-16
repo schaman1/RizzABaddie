@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://byvxruitghyc6"
-path="res://.godot/imported/Banc.png-053b5bb5471616dc038e093d18aac3be.ctex"
+uid="uid://cyycukauekea5"
+path="res://.godot/imported/TextAnimPlayerFoundBaddie.png-f9730c6dbf099cfe5bf796a80399e6be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Furniture/Banc.png"
-dest_files=["res://.godot/imported/Banc.png-053b5bb5471616dc038e093d18aac3be.ctex"]
+source_file="res://assets/TextAnimPlayerFoundBaddie.png"
+dest_files=["res://.godot/imported/TextAnimPlayerFoundBaddie.png-f9730c6dbf099cfe5bf796a80399e6be.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://by7rugmnx33h6"]
 
 [ext_resource type="Script" uid="uid://dyabicf6hykn3" path="res://scripts/Game.cs" id="1_lnu2h"]
-[ext_resource type="Texture2D" uid="uid://bjt8ihp26foga" path="res://assets/Furniture/Losange.png" id="2_lbhrr"]
+[ext_resource type="Texture2D" uid="uid://bjt8ihp26foga" path="res://assets/Decors/Losange.png" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://ddc0ra33rwdc8" path="res://scenes/add_value.tscn" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://do368oih3yt64" path="res://scenes/week.tscn" id="3_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="3_lnu2h"]
@@ -10,9 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://cgngbupmoydaj" path="res://scenes/hand_display.tscn" id="7_0tnpc"]
 [ext_resource type="PackedScene" uid="uid://bddxqthuqyjxe" path="res://scenes/Losange.tscn" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://c1wsf28ps0g7v" path="res://scenes/canvas_layer_loading.tscn" id="10_vtaks"]
-[ext_resource type="Texture2D" uid="uid://b2swp57i0ipx2" path="res://assets/Ground.jpg" id="11_kvpfn"]
+[ext_resource type="Texture2D" uid="uid://b2swp57i0ipx2" path="res://assets/Decors/Ground.jpg" id="11_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://bhmit0whrel2i" path="res://scenes/player.tscn" id="12_dinhu"]
 [ext_resource type="PackedScene" uid="uid://deqeickwri2jw" path="res://scenes/play_area.tscn" id="13_kvuet"]
+[ext_resource type="PackedScene" uid="uid://24jyhsalqf61" path="res://scenes/spawn_area.tscn" id="14_trtic"]
+[ext_resource type="PackedScene" uid="uid://4iriixcobne" path="res://scenes/anim_player_found_baddie.tscn" id="15_ir15t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
 bg_color = Color(1, 0.35686275, 0.35686275, 1)
@@ -215,7 +217,7 @@ _data = {
 &"Reset": SubResource("Animation_iywne")
 }
 
-[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "NodeEndGame", "LosangeYOrNo", "LayerLoading", "Spawner", "CardPlayArea")]
+[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "CardGameMarginContainer", "NodeEndGame", "LosangeYOrNo", "LayerLoading", "Spawner", "CardPlayArea", "UpgradeSpawnArea", "DisplayPseudoFoundBaddie")]
 script = ExtResource("1_lnu2h")
 ButtonQuit = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonQuit/TextureButton")
 ButtonDraw = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonDraw/TextureButton")
@@ -229,6 +231,7 @@ TimerShowActions = NodePath("TimerShowCards")
 ProbaDieProgressBar = NodePath("CanvasLayerCard/MarginContainerBorder/ProgressBar")
 WeekBoxContainer = NodePath("CanvasLayerCard/MarginContainerBorder/Week")
 Hand = NodePath("CanvasLayerCard/Hand")
+CardGameMarginContainer = NodePath("CanvasLayerCard/MarginContainerCenter")
 NodeEndGame = NodePath("CanvasLayerCard/ColorRectEndGame")
 AddValuePackedScene = ExtResource("3_iywne")
 MainScene = ExtResource("4_u5sy4")
@@ -237,8 +240,13 @@ LosangeYOrNo = NodePath("CanvasLayerCard/MarginContainerCenter/YesOrNo")
 LayerLoading = NodePath("CanvasLayerLoading")
 Spawner = NodePath("MultiplayerSpawner")
 CardPlayArea = NodePath("PlayArea")
+UpgradeSpawnArea = NodePath("SpawnArea")
+DisplayPseudoFoundBaddie = NodePath("CanvasLayerCard/AnimPlayerFoundBaddie")
 
 [node name="CanvasLayerCard" type="CanvasLayer" parent="." unique_id=1667825297]
+
+[node name="AnimPlayerFoundBaddie" parent="CanvasLayerCard" unique_id=926121617 instance=ExtResource("15_ir15t")]
+visible = false
 
 [node name="MarginContainerBorder" type="MarginContainer" parent="CanvasLayerCard" unique_id=1769118479]
 anchors_preset = 15
@@ -264,6 +272,7 @@ show_percentage = false
 
 [node name="Week" parent="CanvasLayerCard/MarginContainerBorder" unique_id=883889003 instance=ExtResource("3_lbhrr")]
 layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="MarginContainerCenter" type="MarginContainer" parent="CanvasLayerCard" unique_id=1014659603]
 anchors_preset = 15
@@ -440,9 +449,9 @@ z_index = 2
 custom_minimum_size = Vector2(0, 75)
 custom_maximum_size = Vector2(400, -1)
 offset_left = 90.0
-offset_top = -40.0
+offset_top = -38.0
 offset_right = -90.0
-offset_bottom = 35.000244
+offset_bottom = 37.000244
 theme_override_constants/separation = -10
 alignment = 1
 
@@ -471,5 +480,13 @@ offset_left = 560.0
 offset_top = -1.0
 offset_right = 560.0
 offset_bottom = -1.0
+
+[node name="SpawnArea" parent="." unique_id=69254472 instance=ExtResource("14_trtic")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_bottom = 75.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1913373355]

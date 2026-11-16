@@ -107,6 +107,10 @@ public partial class HandDisplay : HBoxContainer
 		{
 			CardsInHand[j].IdxList -= 1;
 		}
+		if (IdxCardHover == i)
+		{
+			IdxCardHover = -1; //Remove holding card if it is the one we are destroying
+		}
 	}
 
 	private void InitCardsFromNetwork()
@@ -202,16 +206,19 @@ public partial class HandDisplay : HBoxContainer
 
 	public void HideHand()
 	{
+
 		Vector2 NewPosition = Position;
 		NewPosition.Y+=100+10; //+10 to make it less visible (at the end where it is slow)
 		Tween tweenShowHide = CreateTween();
 		tweenShowHide.SetTrans(Tween.TransitionType.Expo);
 		tweenShowHide.SetEase(Tween.EaseType.Out);
 		tweenShowHide.TweenProperty(this,"position",NewPosition,1.0f);
+		//tweenShowHide.TweenCallback(Callable.From(Hide));
 		CurrentState = State.Block;
 	}
 	public void ShowHand()
 	{
+		Show();
 		Tween tweenShowHide = CreateTween();
 		tweenShowHide.SetTrans(Tween.TransitionType.Expo);
 		tweenShowHide.SetEase(Tween.EaseType.Out);

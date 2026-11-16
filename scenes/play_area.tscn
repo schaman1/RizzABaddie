@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://deqeickwri2jw"]
 
-[ext_resource type="Texture2D" uid="uid://dby5jlqsg5eq0" path="res://assets/Furniture/carrelage.png" id="1_gtu41"]
+[ext_resource type="Texture2D" uid="uid://dby5jlqsg5eq0" path="res://assets/Decors/carrelage.png" id="1_gtu41"]
 [ext_resource type="Script" uid="uid://tbh7litemcpu" path="res://scripts/PlayArea.cs" id="1_yjffj"]
-[ext_resource type="Texture2D" uid="uid://bipwd7p1xn2d" path="res://assets/Furniture/canap.png" id="2_i1jbm"]
-[ext_resource type="Texture2D" uid="uid://byvxruitghyc6" path="res://assets/Furniture/Banc.png" id="3_b00k2"]
-[ext_resource type="Texture2D" uid="uid://cvnlpjec66fe" path="res://assets/Furniture/Tabouret.png" id="4_yjffj"]
+[ext_resource type="Texture2D" uid="uid://bipwd7p1xn2d" path="res://assets/Decors/canap.png" id="2_i1jbm"]
+[ext_resource type="Texture2D" uid="uid://byvxruitghyc6" path="res://assets/Decors/Banc.png" id="3_b00k2"]
+[ext_resource type="Texture2D" uid="uid://cvnlpjec66fe" path="res://assets/Decors/Tabouret.png" id="4_yjffj"]
 [ext_resource type="PackedScene" uid="uid://jmjyxj78dtk1" path="res://scenes/baddie.tscn" id="6_l5rg5"]
 
 [node name="PlayArea" type="Control" unique_id=85647742 node_paths=PackedStringArray("CameraPosition", "BaddiePosition", "baddie", "camera")]
@@ -24,49 +24,50 @@ camera = NodePath("Camera2D")
 
 [node name="Carrelage" type="Sprite2D" parent="." unique_id=1958429277]
 texture_repeat = 2
+position = Vector2(0, 14)
 texture = ExtResource("1_gtu41")
 region_enabled = true
 region_rect = Rect2(0, 0, 400, 400)
 
 [node name="CanapLeft" type="Sprite2D" parent="." unique_id=583944624]
-position = Vector2(-99, 0)
+position = Vector2(-99, 14)
 rotation = -1.5707964
 texture = ExtResource("2_i1jbm")
 
 [node name="CanapRight" type="Sprite2D" parent="." unique_id=1141853469]
-position = Vector2(-12.000002, -111)
+position = Vector2(-12.000002, -97)
 rotation = -0.3298672
 texture = ExtResource("2_i1jbm")
 flip_h = true
 
 [node name="Banc" type="Sprite2D" parent="." unique_id=627842535]
-position = Vector2(-3, 87)
+position = Vector2(-3, 101)
 texture = ExtResource("3_b00k2")
 
 [node name="Tabouret" type="Sprite2D" parent="." unique_id=509490180]
-position = Vector2(92, -13)
+position = Vector2(92, 1)
 texture = ExtResource("4_yjffj")
 
 [node name="1" type="Marker2D" parent="." unique_id=240927525]
-position = Vector2(13, -117)
+position = Vector2(13, -103)
 
 [node name="2" type="Marker2D" parent="." unique_id=662688255]
-position = Vector2(-101, -14)
+position = Vector2(-101, 0)
 
 [node name="3" type="Marker2D" parent="." unique_id=189876082]
-position = Vector2(-3, 77)
+position = Vector2(-3, 91)
 
 [node name="4" type="Marker2D" parent="." unique_id=1321335449]
-position = Vector2(-27, -106)
+position = Vector2(-27, -92)
 
 [node name="5" type="Marker2D" parent="." unique_id=1765635205]
-position = Vector2(-96, 26)
+position = Vector2(-96, 40)
 
 [node name="BaddieMarker" type="Marker2D" parent="." unique_id=1041574812]
-position = Vector2(92, -20)
+position = Vector2(92, -6)
 
 [node name="CameraPosition" type="Marker2D" parent="." unique_id=393069061]
-position = Vector2(0, -14)
 
 [node name="Baddie" parent="." unique_id=2126234741 instance=ExtResource("6_l5rg5")]
-position = Vector2(92, -14)
+position = Vector2(92, 0)
+gravity_scale = 0.0

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjt8ihp26foga"
-path="res://.godot/imported/Losange.png-2befc3e5225bc0319487968be748247a.ctex"
+uid="uid://b2swp57i0ipx2"
+path="res://.godot/imported/Ground.jpg-24e8647ccd01376b07b7b4589a0c82c0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Furniture/Losange.png"
-dest_files=["res://.godot/imported/Losange.png-2befc3e5225bc0319487968be748247a.ctex"]
+source_file="res://assets/Decors/Ground.jpg"
+dest_files=["res://.godot/imported/Ground.jpg-24e8647ccd01376b07b7b4589a0c82c0.ctex"]
 
 [params]
 
