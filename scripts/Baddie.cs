@@ -13,7 +13,10 @@ public partial class Baddie : RigidBody2D
 
 	public override void _Ready()
 	{
-		AreaDetection.Connect("body_entered",Callable.From<Node>(OnPlayerEnter));
+		if (Multiplayer.IsServer())
+		{
+			AreaDetection.Connect("body_entered",Callable.From<Node>(OnPlayerEnter));
+		}
 		StartCollision();
 		timerBeforeCanCollide.Timeout += SetCanCollide;
 	}
@@ -22,8 +25,6 @@ public partial class Baddie : RigidBody2D
 	public override void _Process(double delta)
 	{
 	}
-
-
 	private void OnPlayerEnter(Node node)
 	{
 		//Only server can send this

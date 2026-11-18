@@ -17,6 +17,7 @@ _data = {
 point_count = 2
 
 [node name="AnimPlayerFoundBaddie" type="Control" unique_id=926121617 node_paths=PackedStringArray("text", "sprite", "path", "time", "Texture")]
+z_index = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

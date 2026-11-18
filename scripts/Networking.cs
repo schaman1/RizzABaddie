@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
-
 public partial class Networking : Node
 {
 	// Called when the node enters the scene tree for the first time.
@@ -62,7 +60,7 @@ public partial class Networking : Node
 	//Static !important
 	public static Networking Instance {get;set;}
 
-	enum State {InGame,InMenu};
+	enum State {LookingForBaddie,PlayingCardGame,InMenu};
 	State CurrentState = State.InMenu; 
 
 	public override void _Ready()
@@ -276,7 +274,7 @@ public partial class Networking : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void SetDisconnected(long PeerId)
 	{
-		if(CurrentState == State.InGame)
+		if(CurrentState != State.InMenu)
 		{
 			PlayersInfo.PlayerDic[PeerId].SetDisconnected();
 		}
@@ -306,7 +304,7 @@ public partial class Networking : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void LoadSceneGame()
 	{
-		CurrentState = State.InGame;
+		CurrentState = State.LookingForBaddie;
 
 		foreach(Player player in PlayersInfo.PlayerDic.Values)
 		{
@@ -376,15 +374,18 @@ public partial class Networking : Node
 				GD.Print("Manche Finish");
 				PlayersInfo.EndManche();
 				Rpc(nameof(EmitMancheFinish));
+				AnimationRevealCardsPlayed.Instance.ShowCardPlayedByPlayers(PlayersInfo,true);
 			}
 			else
 			{
 				GD.Print("Round Finish");
 				PlayersInfo.EndRound();
 				Rpc(nameof(EmitRoundFinish));
+				AnimationRevealCardsPlayed.Instance.ShowCardPlayedByPlayers(PlayersInfo,false);
 			}
 		}
 	}
+
 	//Emit
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void EmitRoundFinish()
@@ -417,25 +418,25 @@ public partial class Networking : Node
 		}
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
-	public void FinishDisplayAll(long PeerId)
+	//[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void FinishDisplayAll()
 	{
-		PlayersInfo.SetPlayerFInishDisplay(PeerId);
-		if (PlayersInfo.HasAllPeerFinishManche())
+		// PlayersInfo.SetPlayerFInishDisplay(PeerId);
+		// if (PlayersInfo.HasAllPeerFinishManche())
+		// {
+		// }
+		if (CurrentManche == NbrMaxManchePerGame)
 		{
-			if (CurrentManche == NbrMaxManchePerGame)
-			{
-				PlayersInfo.SetWinner();
+			PlayersInfo.SetWinner();
 
-				foreach(Player player in PlayersInfo.PlayerDic.Values)
-				{
-					RpcId(player.Id,nameof(EmitEndGame),PlayersInfo.Winners.Contains(player));
-				}
-			}
-			else
+			foreach(Player player in PlayersInfo.PlayerDic.Values)
 			{
-				StartManche(); //As everyone finish display manche, start new one
+				RpcId(player.Id,nameof(EmitEndGame),PlayersInfo.Winners.Contains(player));
 			}
+		}
+		else
+		{
+			StartManche(); //As everyone finish display manche, start new one
 		}
 	}
 
@@ -519,6 +520,7 @@ public partial class Networking : Node
 	public void StartManche()
 	{
 		GD.Print("Start Manche");
+		CurrentState = State.LookingForBaddie;
 		CurrentManche+=1;
 
 		SetIdxBomb();
@@ -572,15 +574,18 @@ public partial class Networking : Node
 	public void PlayerFoundBaddie(long PeerId)
 	{
 		//Verif si vrm proche de baddie ?
-		int i = 0;
-		foreach(Player player in PlayersInfo.PlayerDic.Values)
+		if(CurrentState == State.LookingForBaddie)
 		{
-
-			RpcId(player.Id,nameof(SendPlayerFoundBaddie),i,PeerId);
-			i++;
-		}
-;		
+			CurrentState = State.PlayingCardGame;
+			int i = 0;
+			foreach(Player player in PlayersInfo.PlayerDic.Values)
+			{
+				RpcId(player.Id,nameof(SendPlayerFoundBaddie),i,PeerId);
+				i++;
+			}
+		}		
 	}
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void SendPlayerFoundBaddie(int IdxNewPosition,long PeerIdFoundBaddie)
 	{

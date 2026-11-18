@@ -35,7 +35,6 @@ public partial class Hand : Node
             // if (PlayerId==1) //If player is Host
             // {
             // }
-            GD.Print("Add card to : ",PlayerId);
             AddCardServ(id,PlayerId);
         }
     }

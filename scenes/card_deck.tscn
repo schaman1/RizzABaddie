@@ -1,0 +1,142 @@
+[gd_scene format=3 uid="uid://xpusi3xq7t4o"]
+
+[ext_resource type="Script" uid="uid://tgsavcjoewag" path="res://scripts/CardDeck.cs" id="1_eu546"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_eu546"]
+properties/0/path = NodePath(".:scale")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="Animation" id="Animation_mui2q"]
+resource_name = "Enter"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(12.125655, 0.30778593),
+"update": 0,
+"values": [Vector2(0.2, 0.2), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4tgep"]
+resource_name = "Exit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+
+[sub_resource type="Animation" id="Animation_eu546"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4tgep"]
+_data = {
+&"Enter": SubResource("Animation_mui2q"),
+&"Exit": SubResource("Animation_4tgep"),
+&"RESET": SubResource("Animation_eu546")
+}
+
+[node name="CardDeck" type="Control" unique_id=1352515125 node_paths=PackedStringArray("anim", "color", "CardPowerLabel")]
+custom_minimum_size = Vector2(50, 75)
+custom_maximum_size = Vector2(50, 75)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -526.0
+offset_bottom = -249.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_eu546")
+anim = NodePath("AnimationPlayer")
+color = NodePath("ColorRect")
+CardPowerLabel = NodePath("MarginContainer/MarginContainer2/Label")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=771551761]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1071853563]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ColorRect3" type="ColorRect" parent="MarginContainer" unique_id=692231381]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.49708384, 0.54669994, 0.25904208, 1)
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer" unique_id=396920348]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer2" unique_id=1150096169]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 0.0
+theme_override_font_sizes/font_size = 8
+text = "CardPower"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer/MarginContainer2/Label" unique_id=847330669]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+size_flags_stretch_ratio = 0.2
+color = Color(0.2520276, 0.25202766, 0.25202763, 1)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=887093107]
+replication_config = SubResource("SceneReplicationConfig_eu546")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=666755632]
+libraries/ = SubResource("AnimationLibrary_4tgep")

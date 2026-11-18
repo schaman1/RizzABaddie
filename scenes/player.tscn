@@ -2,6 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://b6ulxauclhwsi" path="res://assets/Sans titre.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://b3a6xqpvlil2f" path="res://scripts/PlayerCharacter.cs" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://ddc0ra33rwdc8" path="res://scenes/add_value.tscn" id="2_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://xpusi3xq7t4o" path="res://scenes/card_deck.tscn" id="3_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="4_dqkch"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tii7q"]
@@ -27,6 +29,8 @@ properties/0/replication_mode = 1
 script = ExtResource("1_g2els")
 camera = NodePath("Camera2D")
 Container = NodePath("PlayerContainer")
+AddValuePackedScene = ExtResource("2_qlg0r")
+CardDeckPackedScene = ExtResource("3_tuyoq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=867325193]
 shape = SubResource("CapsuleShape2D_tii7q")

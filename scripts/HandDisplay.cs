@@ -86,7 +86,6 @@ public partial class HandDisplay : HBoxContainer
 		NewCard.OnStopHover += CardStopHover;
 		NewCard.OnClick += PlayCard;
 		CardsInHand.Add(NewCard);
-		GD.Print("Added card");
 	}
 
 	public void RemoveCard(int id)

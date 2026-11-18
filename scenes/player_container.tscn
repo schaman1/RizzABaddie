@@ -3,11 +3,12 @@
 [ext_resource type="Script" uid="uid://crdgvtyyqnx6p" path="res://scripts/PlayerContainer.cs" id="1_r7lr4"]
 [ext_resource type="Shader" uid="uid://drvx5yx8snt2b" path="res://shader/round.gdshader" id="2_a7xq8"]
 [ext_resource type="Texture2D" uid="uid://da5qduphnj2hw" path="res://assets/LosangeGreen.png" id="2_gv8qy"]
+[ext_resource type="Texture2D" uid="uid://cyycukauekea5" path="res://assets/TextAnimPlayerFoundBaddie.png" id="2_ldo80"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r7lr4"]
 shader = ExtResource("2_a7xq8")
 
-[node name="PlayerContainer" type="MarginContainer" unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "BorderColorRect", "HasPlayedColorRect", "BgColorRect")]
+[node name="PlayerContainer" type="MarginContainer" unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "HasPlayedColorRect")]
 custom_minimum_size = Vector2(60, 0)
 custom_maximum_size = Vector2(100, 26)
 propagate_maximum_size = false
@@ -16,12 +17,13 @@ offset_bottom = 26.0
 script = ExtResource("1_r7lr4")
 LabelName = NodePath("VBoxContainer/Name")
 LabelLove = NodePath("VBoxContainer/HBoxContainer/Love")
-ColorActive = Color(0, 0.6862745, 0.6862745, 1)
-ColorPassive = Color(0, 0.3019608, 0.3019608, 1)
 DisconnectedColor = Color(0.4700758, 0.4700759, 0.4700756, 1)
-BorderColorRect = NodePath("")
 HasPlayedColorRect = NodePath("ColorRectHasPlay")
-BgColorRect = NodePath("")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1729925859]
+layout_mode = 2
+texture = ExtResource("2_ldo80")
+expand_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1833042064]
 propagate_maximum_size = false
@@ -42,7 +44,6 @@ layout_mode = 2
 alignment = 2
 
 [node name="Love" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=199261730]
-modulate = Color(0.69135684, 0.6913568, 0.69135684, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1

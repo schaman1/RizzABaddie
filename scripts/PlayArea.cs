@@ -9,6 +9,7 @@ public partial class PlayArea : Control
 	[Export]Marker2D BaddiePosition;
 	[Export]Baddie baddie;
 	[Export]Camera2D camera;
+	[Export]public PathFollow2D PathFollowToLeave;
 	List<Vector2> Vector2PositionsPlayers = new List<Vector2>();
 	public override void _Ready()
 	{

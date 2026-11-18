@@ -23,7 +23,7 @@ public partial class AnimPlayerFoundBaddie : Control
 	{
 	}
 
-	public void StartAnimationPlayerFoundBaddie(String PlayerName,Vector2 NewPlayerPosition,System.Action<Vector2> ChangePlayerPos,System.Action SetNewCamera)
+	public void StartAnimationPlayerFoundBaddie(String PlayerName,Vector2 NewPlayerPosition,System.Action<Vector2> ChangePlayerPos,System.Action SetNewCamera, System.Action ShowCardContainer)
 	{
 		text.Text = PlayerName + " found the girl !";
 		time.Start();
@@ -31,6 +31,7 @@ public partial class AnimPlayerFoundBaddie : Control
 		newTween.TweenProperty(Texture,"modulate",new Color(0,0,0,1),time.WaitTime + 2);
 		newTween.TweenCallback(Callable.From(() => ChangePlayerPos(NewPlayerPosition)));
 		newTween.TweenCallback(Callable.From(SetNewCamera));
+		newTween.TweenCallback(Callable.From(ShowCardContainer));
 		newTween.TweenProperty(Texture,"modulate",new Color(0,0,0,0),0.3);
 	}
 	public void StartAnim(){

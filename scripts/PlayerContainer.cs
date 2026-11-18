@@ -30,7 +30,7 @@ public partial class PlayerContainer : Godot.MarginContainer
 
 	public void DisplayValues()
 	{
-		LabelLove.Text = "Love = " + Love.ToString();
+		LabelLove.Text = Love.ToString();
 		//LabelPower.Text = "Power = "+ power.ToString();
 		LabelName.Text = name;
 	}

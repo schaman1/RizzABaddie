@@ -7,7 +7,13 @@
 [ext_resource type="Texture2D" uid="uid://cvnlpjec66fe" path="res://assets/Decors/Tabouret.png" id="4_yjffj"]
 [ext_resource type="PackedScene" uid="uid://jmjyxj78dtk1" path="res://scenes/baddie.tscn" id="6_l5rg5"]
 
-[node name="PlayArea" type="Control" unique_id=85647742 node_paths=PackedStringArray("CameraPosition", "BaddiePosition", "baddie", "camera")]
+[sub_resource type="Curve2D" id="Curve2D_l5rg5"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -103, -71, 0, 0, 0, 0, -350, -81)
+}
+point_count = 3
+
+[node name="PlayArea" type="Control" unique_id=85647742 node_paths=PackedStringArray("CameraPosition", "BaddiePosition", "baddie", "camera", "PathFollowToLeave")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +25,7 @@ CameraPosition = NodePath("CameraPosition")
 BaddiePosition = NodePath("BaddieMarker")
 baddie = NodePath("Baddie")
 camera = NodePath("Camera2D")
+PathFollowToLeave = NodePath("Path2D/PathFollow2D")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1664756039]
 
@@ -71,3 +78,10 @@ position = Vector2(92, -6)
 [node name="Baddie" parent="." unique_id=2126234741 instance=ExtResource("6_l5rg5")]
 position = Vector2(92, 0)
 gravity_scale = 0.0
+
+[node name="Path2D" type="Path2D" parent="." unique_id=103565741]
+curve = SubResource("Curve2D_l5rg5")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1107007791]
+rotation = -2.5380702
+loop = false

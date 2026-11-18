@@ -463,7 +463,7 @@ root_node = NodePath("../CanvasLayerCard/MarginContainerCenter/ButtonQuit/Label"
 libraries/ = SubResource("AnimationLibrary_lbhrr")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1582407174]
-_spawnable_scenes = PackedStringArray("uid://bhmit0whrel2i")
+_spawnable_scenes = PackedStringArray("uid://bhmit0whrel2i", "uid://xpusi3xq7t4o")
 spawn_path = NodePath("..")
 
 [node name="TimerShowCards" type="Timer" parent="." unique_id=1781158152]
