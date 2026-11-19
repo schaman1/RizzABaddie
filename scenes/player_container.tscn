@@ -62,3 +62,7 @@ material = SubResource("ShaderMaterial_r7lr4")
 custom_maximum_size = Vector2(10, 10)
 layout_mode = 2
 color = Color(0.21960784, 1, 0.23921569, 1)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1412714854]
+_spawnable_scenes = PackedStringArray("uid://ddc0ra33rwdc8")
+spawn_path = NodePath("..")

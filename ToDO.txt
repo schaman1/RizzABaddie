@@ -3,3 +3,6 @@ Each player has one different color
 Card + AddCard popup don't show ! + D'ont see well the label of the players
 
 Organise everything + Create a var called, myplayer + myid in game !
+COntainer Love can just use Multiplayer Synchroniser !
+Player COntainer hidden. So to remove if not use anymore
+Spawn of popup, now only on serv = remove unusefull fct

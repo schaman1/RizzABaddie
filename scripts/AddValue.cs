@@ -5,6 +5,12 @@ public partial class AddValue : Label
 {
 	// Called when the node enters the scene tree for the first time.
 	[Export] AnimationPlayer anim;
+
+    public override void _EnterTree()
+    {
+        SetMultiplayerAuthority(1); //Only the host can move it
+    }
+
 	
 	public override void _Ready()
 	{

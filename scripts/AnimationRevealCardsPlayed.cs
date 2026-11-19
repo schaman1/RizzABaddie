@@ -6,7 +6,7 @@ using System.Linq;
 public partial class AnimationRevealCardsPlayed : Node
 {
     [Signal]public delegate void MovePlayerToCenterEventHandler();
-    [Signal]public delegate void MakePlayerReactEventHandler(int CardId);
+    [Signal]public delegate void MakePlayerReactEventHandler(int CardId ,int Love);
     [Signal]public delegate void EndRoundEventHandler(int CardId);
     Timer TimerBetweenPlayers;
     Timer TimerBeforeShowCard;
@@ -40,19 +40,19 @@ public partial class AnimationRevealCardsPlayed : Node
         IsEndManche = NewIsEndManche;
         IdxPlayerShow = 0;
         TimerBetweenPlayers.Start();
-        TimerBeforeShowCard.Start();
         MoveTargetPlayerToCenter();
 	}
 
     public void MoveTargetPlayerToCenter()
     {
+        TimerBeforeShowCard.Start();
 
         if (IdxPlayerShow >= PlayerInfo.PlayerDic.Count)
         {
             TimerBetweenPlayers.Stop();
             if (!IsEndManche)
             {
-                EmitEndRound();
+                Rpc(nameof(EmitEndRound));
             }
             else
             {
@@ -81,12 +81,13 @@ public partial class AnimationRevealCardsPlayed : Node
     }
     public void MakePlayerReactToCard()
     {
-        RpcId(CurrentPeerId,nameof(FctEmitSignalPlayerReact));
+        Networking.Instance.CreatePopup(CurrentPeerId,PlayerInfo.PlayerDic[CurrentPeerId].CardPower);
+        RpcId(CurrentPeerId,nameof(FctEmitSignalPlayerReact),PlayerInfo.PlayerDic[CurrentPeerId].CardIdDraw,PlayerInfo.PlayerDic[CurrentPeerId].Love);
     }
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
-    public void FctEmitSignalPlayerReact()
+    public void FctEmitSignalPlayerReact(int CardIdDraw,int NewLove)
     {
-        EmitSignal(SignalName.MakePlayerReact,PlayerInfo.PlayerDic[CurrentPeerId].CardIdDraw);
+        EmitSignal(SignalName.MakePlayerReact,CardIdDraw,NewLove);
     }
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
     public void EmitEndRound()

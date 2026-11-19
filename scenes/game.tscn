@@ -217,17 +217,14 @@ _data = {
 &"Reset": SubResource("Animation_iywne")
 }
 
-[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "PlayerContainer", "MyPlayer", "TimerShowActions", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "CardGameMarginContainer", "NodeEndGame", "LosangeYOrNo", "LayerLoading", "Spawner", "CardPlayArea", "UpgradeSpawnArea", "DisplayPseudoFoundBaddie")]
+[node name="Game" type="Node2D" unique_id=480628763 node_paths=PackedStringArray("ButtonQuit", "ButtonDraw", "Animation", "LabelActionChoose", "LabelDeck", "ProbaDieProgressBar", "WeekBoxContainer", "Hand", "CardGameMarginContainer", "NodeEndGame", "LosangeYOrNo", "LayerLoading", "Spawner", "CardPlayArea", "UpgradeSpawnArea", "DisplayPseudoFoundBaddie")]
 script = ExtResource("1_lnu2h")
 ButtonQuit = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonQuit/TextureButton")
 ButtonDraw = NodePath("CanvasLayerCard/MarginContainerCenter/ButtonDraw/TextureButton")
 Animation = NodePath("AnimationPlayer")
 LabelActionChoose = NodePath("CanvasLayerCard/MarginContainerCenter/WhatChose/LabelActionChoose")
 LabelDeck = NodePath("CanvasLayerCard/MarginContainerCenter/Deck/LabelDeck")
-PlayerContainer = NodePath("CanvasLayerCard/MarginContainerCenter/Players")
 PlayerPackedScene = ExtResource("3_lnu2h")
-MyPlayer = NodePath("CanvasLayerCard/MarginContainerCenter/PlayerContainer")
-TimerShowActions = NodePath("TimerShowCards")
 ProbaDieProgressBar = NodePath("CanvasLayerCard/MarginContainerBorder/ProgressBar")
 WeekBoxContainer = NodePath("CanvasLayerCard/MarginContainerBorder/Week")
 Hand = NodePath("CanvasLayerCard/Hand")
@@ -285,15 +282,8 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 150
 theme_override_constants/margin_bottom = 10
 
-[node name="Players" type="HBoxContainer" parent="CanvasLayerCard/MarginContainerCenter" unique_id=586711297]
-custom_maximum_size = Vector2(800, -1)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_constants/separation = 16
-alignment = 1
-
 [node name="PlayerContainer" parent="CanvasLayerCard/MarginContainerCenter" unique_id=2042746711 instance=ExtResource("3_lnu2h")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8

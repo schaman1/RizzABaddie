@@ -24,6 +24,7 @@ public partial class Networking : Node
 	[Signal] public delegate void PeerPlayEventHandler(int PeerId); //When want to get existing players
 	[Signal] public delegate void ProbaToSetEventHandler(float proba); //When want to get existing players
 	[Signal] public delegate void OnCardPlayEventHandler(int CardId,Godot.Collections.Array<int> CardInfo); //When want to get existing players
+	[Signal] public delegate void AddPopupValueEventHandler(long PeerId,int AddPopupValue); //When want to get existing players
 
 	public string GameScene = "res://scenes/game.tscn";
 	private string PlayerScene = "res://scenes/player.tscn";
@@ -578,17 +579,29 @@ public partial class Networking : Node
 		{
 			CurrentState = State.PlayingCardGame;
 			int i = 0;
+			PlayersInfo.PlayerDic[PeerId].Love += 3; //3 for found baddie but ! 
+			CreatePopup(PeerId,3);
 			foreach(Player player in PlayersInfo.PlayerDic.Values)
 			{
-				RpcId(player.Id,nameof(SendPlayerFoundBaddie),i,PeerId);
+				RpcId(player.Id,nameof(SendPlayerFoundBaddie),i,PeerId,PlayersInfo.PlayerDic[PeerId].Love);
 				i++;
 			}
 		}		
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
-	public void SendPlayerFoundBaddie(int IdxNewPosition,long PeerIdFoundBaddie)
+	public void SendPlayerFoundBaddie(int IdxNewPosition,long PeerIdFoundBaddie,int NewLove)
 	{
-		EmitSignal(SignalName.StartCardGame,IdxNewPosition,PeerIdFoundBaddie);
+		EmitSignal(SignalName.StartCardGame,IdxNewPosition,PeerIdFoundBaddie,NewLove);
 	}
+	public void CreatePopup(long PeerId,int Value)
+	{
+		Rpc(nameof(CreatePopupForAllPeer),PeerId,Value);
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer,CallLocal = true,TransferMode =MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void CreatePopupForAllPeer(long PeerId,int Value)
+	{
+		EmitSignal(SignalName.AddPopupValue,PeerId,Value);
+	}
+
 }

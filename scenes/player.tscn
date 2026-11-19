@@ -2,9 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://b6ulxauclhwsi" path="res://assets/Sans titre.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://b3a6xqpvlil2f" path="res://scripts/PlayerCharacter.cs" id="1_g2els"]
-[ext_resource type="PackedScene" uid="uid://ddc0ra33rwdc8" path="res://scenes/add_value.tscn" id="2_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://xpusi3xq7t4o" path="res://scenes/card_deck.tscn" id="3_tuyoq"]
-[ext_resource type="PackedScene" uid="uid://d3fheplo2jc8i" path="res://scenes/player_container.tscn" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://crdgvtyyqnx6p" path="res://scripts/PlayerContainer.cs" id="5_smehm"]
+[ext_resource type="Texture2D" uid="uid://cyycukauekea5" path="res://assets/TextAnimPlayerFoundBaddie.png" id="6_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://da5qduphnj2hw" path="res://assets/LosangeGreen.png" id="7_y4r1p"]
+[ext_resource type="Shader" uid="uid://drvx5yx8snt2b" path="res://shader/round.gdshader" id="8_d2wvv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tii7q"]
 radius = 8.0
@@ -24,12 +26,17 @@ animations = [{
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
+properties/1/path = NodePath("PlayerContainer/VBoxContainer/HBoxContainer/Love:text")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7lr4"]
+shader = ExtResource("8_d2wvv")
 
 [node name="Player" type="CharacterBody2D" unique_id=472399375 node_paths=PackedStringArray("camera", "Container")]
 script = ExtResource("1_g2els")
 camera = NodePath("Camera2D")
 Container = NodePath("PlayerContainer")
-AddValuePackedScene = ExtResource("2_qlg0r")
 CardDeckPackedScene = ExtResource("3_tuyoq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=867325193]
@@ -44,8 +51,59 @@ position_smoothing_enabled = true
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1591277963]
 replication_config = SubResource("SceneReplicationConfig_g2els")
 
-[node name="PlayerContainer" parent="." unique_id=97836628 instance=ExtResource("4_dqkch")]
+[node name="PlayerContainer" type="MarginContainer" parent="." unique_id=97836628 node_paths=PackedStringArray("LabelName", "LabelLove", "HasPlayedColorRect")]
+custom_minimum_size = Vector2(60, 0)
+custom_maximum_size = Vector2(100, 26)
+propagate_maximum_size = false
 offset_left = -31.0
 offset_top = -42.0
 offset_right = 29.0
 offset_bottom = -16.0
+script = ExtResource("5_smehm")
+LabelName = NodePath("VBoxContainer/Name")
+LabelLove = NodePath("VBoxContainer/HBoxContainer/Love")
+DisconnectedColor = Color(0.4700758, 0.4700759, 0.4700756, 1)
+HasPlayedColorRect = NodePath("ColorRectHasPlay")
+
+[node name="TextureRect" type="TextureRect" parent="PlayerContainer" unique_id=1729925859]
+layout_mode = 2
+texture = ExtResource("6_ur7pv")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerContainer" unique_id=1833042064]
+propagate_maximum_size = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="PlayerContainer/VBoxContainer" unique_id=1819496330]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Player1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerContainer/VBoxContainer" unique_id=1956611784]
+layout_mode = 2
+alignment = 2
+
+[node name="Love" type="Label" parent="PlayerContainer/VBoxContainer/HBoxContainer" unique_id=199261730]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Sprite2D" type="TextureRect" parent="PlayerContainer/VBoxContainer/HBoxContainer" unique_id=1366480878]
+layout_mode = 2
+texture = ExtResource("7_y4r1p")
+expand_mode = 2
+
+[node name="ColorRectHasPlay" type="ColorRect" parent="PlayerContainer" unique_id=1150423380]
+material = SubResource("ShaderMaterial_r7lr4")
+custom_maximum_size = Vector2(10, 10)
+layout_mode = 2
+color = Color(0.21960784, 1, 0.23921569, 1)

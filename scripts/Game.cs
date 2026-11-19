@@ -24,10 +24,7 @@ public partial class Game : Node2D
 	[Export] AnimationPlayer Animation;
 	[Export] Label LabelActionChoose;
 	[Export] Label LabelDeck;
-	[Export] HBoxContainer PlayerContainer;
 	[Export] PackedScene PlayerPackedScene;
-	[Export] PlayerContainer MyPlayer;
-	//[Export] Timer TimerShowActions;
 	[Export] ProgressBar ProbaDieProgressBar;
 	[Export] Week WeekBoxContainer;
 	[Export] HandDisplay Hand;
@@ -42,8 +39,9 @@ public partial class Game : Node2D
 	[Export]PlayArea CardPlayArea;
 	[Export]SpawnArea UpgradeSpawnArea;
 	[Export]AnimPlayerFoundBaddie DisplayPseudoFoundBaddie;
-	private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
+	//private Dictionary<long,PlayerContainer> players = new Dictionary<long, PlayerContainer>();
 	private Dictionary<long,PlayerCharacter> PlayersCharacter = new  Dictionary<long,PlayerCharacter>();
+	private PlayerCharacter MyPlayer;
 	private PlayerContainer CurrentActivePlayerContainer = null;
 	public PlayersInfoClass players_dico;
 	int idx_player_display = 0;
@@ -79,10 +77,11 @@ public partial class Game : Node2D
 		Networking.Instance.Connect(nameof(Networking.Instance.OnPlayerRemove),Callable.From<long>(RemovePlayer));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnHostDisconnected),Callable.From(OnHostDisconnected));
 		Networking.Instance.Connect(nameof(Networking.Instance.OnCardPlay),Callable.From<int,Godot.Collections.Array<int>>(PlayCard));
-		Networking.Instance.Connect(nameof(Networking.Instance.StartCardGame),Callable.From<int,long>(StartCardGame));
+		Networking.Instance.Connect(nameof(Networking.Instance.StartCardGame),Callable.From<int,long,int>(StartCardGame));
+		Networking.Instance.Connect(nameof(Networking.Instance.AddPopupValue),Callable.From<long,int>(AddPopupAddValueToPlayer));
 
 		AnimationRevealCardsPlayed.Instance.Connect(nameof(AnimationRevealCardsPlayed.Instance.MovePlayerToCenter),Callable.From(MoveYourPlayerToShowCardDraw));
-		AnimationRevealCardsPlayed.Instance.Connect(nameof(AnimationRevealCardsPlayed.Instance.MakePlayerReact),Callable.From<int>(MoveYourPlayerAferCardShow));
+		AnimationRevealCardsPlayed.Instance.Connect(nameof(AnimationRevealCardsPlayed.Instance.MakePlayerReact),Callable.From<int,int>(MoveYourPlayerAferCardShow));
 		AnimationRevealCardsPlayed.Instance.Connect(nameof(AnimationRevealCardsPlayed.Instance.EndRound),Callable.From(EndRound));
 
 		if (Multiplayer.IsServer())
@@ -111,7 +110,7 @@ public partial class Game : Node2D
 		GD.Print("Start Manche");
 		UpdatePlayers(IdxSPawn);
 		WeekBoxContainer.NewManche(IdxOfManche); //COntains the idx of the day  / current manche
-		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
+		Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),MyId);
 		ResetHasPlayerPlayerBeginManche();
 	}
 
@@ -152,8 +151,7 @@ public partial class Game : Node2D
 			}
 			//In order to rpcid networking.instance.fctname il faut faire networking.instance.rpcid() le lancer depuis networking
 			Networking.Instance.SetPeerAction((int)Action);
-			PlayersCharacter[Multiplayer.GetUniqueId()].Container.SetPlay();
-			//MyPlayer.SetPlay();
+			PlayersCharacter[MyId].Container.SetPlay();
 			Hand.HideHand();
 			Animation.Play("Choose");
 
@@ -166,18 +164,13 @@ public partial class Game : Node2D
 		foreach(Player player in players_dico.PlayerDic.Values)
 		{
 			PlayerContainer UpdateP;
-			UpdateP = players[player.Id];
+			UpdateP = PlayersCharacter[player.Id].Container;
 			if(player.Id == MyId)
 			{
 				//Tp To new pos
 				PlayersCharacter[player.Id].GlobalPosition = UpgradeSpawnArea.SpawnPositions[IdxNewPos];
 			}
-			// {
-			// }
-			// else
-			// {
-			// 	UpdateP = MyPlayer;
-			// }
+
 			UpdateP.Love = player.Love;
 			UpdateP.power = player.Power;
 			UpdateP.DisplayValues();
@@ -192,12 +185,12 @@ public partial class Game : Node2D
 			PlayersCharacter[Id] = NewPlayer; //add to list
 			
 			NewPlayer.Container.Init(Id,Networking.Instance.PlayersInfo.PlayerDic[Id].Pseudo,Networking.Instance.PlayersInfo.PlayerDic[Id].Love);
-			players[Id] = NewPlayer.Container; //Set the container
+			PlayersCharacter[Id].Container = NewPlayer.Container; //Set the container
 			NbrOfPlayerSpawned++;
 			if (NbrOfPlayerSpawned == Networking.Instance.PlayersInfo.PlayerDic.Count)
 			{
 				InitPlayers(); //As all players are here
-				Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId()); //We are ready to start
+				Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),MyId); //We are ready to start
 			}
 		}
 	}
@@ -210,7 +203,6 @@ public partial class Game : Node2D
 		{
 			String name = player.Pseudo;
 			int Love = player.Love;
-			AddPlayer(player.Id,name,Love);
 		}
 
 		if (Multiplayer.IsServer()) //If serveur, spawn each player for everyone
@@ -224,7 +216,7 @@ public partial class Game : Node2D
 				PlayersCharacter[player.Id] = NewPlayer;
 
 				NewPlayer.Container.Init(player.Id,player.Pseudo,player.Love);
-				players[player.Id] = NewPlayer.Container; //Set the container
+				PlayersCharacter[player.Id].Container = NewPlayer.Container; //Set the container
 
 				//Set the position of the player
 				Vector2 NewPosition = Vector2.Zero;
@@ -233,32 +225,10 @@ public partial class Game : Node2D
 				i++;
 				AddChild(NewPlayer);
 			}
-			Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),Multiplayer.GetUniqueId());
+			Networking.Instance.RpcId(1,nameof(Networking.Instance.SetInManche),MyId);
 		}
 
 		Hand.Init();
-	}
-
-	private void AddPlayer(long Id,String name,int Love)
-	{
-
-		if(Id==MyId) {
-			MyPlayer.Init(Id,name,Love);
-		}
-
-		else
-		{
-			// PlayerContainer new_player = (PlayerContainer)PlayerPackedScene.Instantiate();
-			// new_player.Init(Id,name,Love);
-			// players[Id] = new_player;
-			// PlayerContainer.AddChild(new_player);
-
-			// if (MyPlayer.Initiate)
-			// {
-			// 	PlayerContainer.MoveChild(new_player,LastPlayerIdxAdded);
-			// 	LastPlayerIdxAdded+=1;
-			// }
-		}
 	}
 
 	//Called by networking when everyone has choose his action
@@ -268,20 +238,17 @@ public partial class Game : Node2D
 
 		//Reset values / Set
 		players_dico = Networking.Instance.PlayersInfo;
-		//TimerShowActions.Start();
 		CurrentState = State.Reveal;
-		//ShowActionPlayerContainer.Visible = true;
-		// idx_player_display = 0;
-		// ShowActionPlayer();
 	}
 
 	public void MoveYourPlayerToShowCardDraw()
 	{
-		PlayersCharacter[Multiplayer.GetUniqueId()].MoveToCenterToShowCard(CardPlayArea);
+		PlayersCharacter[MyId].MoveToCenterToShowCard(CardPlayArea);
 	}
-	public void MoveYourPlayerAferCardShow(int CardId)
+	public void MoveYourPlayerAferCardShow(int CardId,int NewLove)
 	{
-		PlayersCharacter[Multiplayer.GetUniqueId()].MoveAfterCardShow(CardPlayArea,CardId);
+		PlayersCharacter[MyId].MoveAfterCardShow(CardPlayArea,CardId);
+		PlayersCharacter[MyId].UpdateLove(NewLove);
 	}
 
 	// private void ShowActionPlayer()
@@ -295,7 +262,7 @@ public partial class Game : Node2D
 	// 		if(CurrentState == State.RevealEndManche)
 	// 		{
 	// 			Hand.StartManche();
-	// 			Networking.Instance.RpcId(1,nameof(Networking.Instance.FinishDisplayAll),Multiplayer.GetUniqueId());
+	// 			Networking.Instance.RpcId(1,nameof(Networking.Instance.FinishDisplayAll),MyId);
 	// 		}
 	// 		else
 	// 		{
@@ -331,13 +298,10 @@ public partial class Game : Node2D
 		else
 		{
 			//Reset
-			Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),Multiplayer.GetUniqueId());
-			//ProbaDieProgressBar.Value += 16;
-			//ShowActionPlayerContainer.Visible = false;
+			Networking.Instance.RpcId(1,nameof(Networking.Instance.GetDiePourcentage),MyId);
 			CurrentState = State.ChooseAction;
 			Hand.ShowHand();
 			Animation.Play("Reset");
-			//MyPlayer.Reset();
 		}
 		ResetHasPlayedPlayer();
 	}
@@ -346,12 +310,9 @@ public partial class Game : Node2D
 	
 		foreach(Player player in players_dico.PlayerDic.Values)
 		{
-			// if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
-			// {
-			// }
 			if ((int)player.Action != 1)
 			{
-				players[player.Id].Reset();
+				PlayersCharacter[player.Id].Container.Reset();
 			}
 		}
 	}
@@ -360,20 +321,16 @@ public partial class Game : Node2D
 		CardPlayArea.StopCardGame();
 		foreach(Player player in players_dico.PlayerDic.Values)
 		{
-			// if(player.Id != MyId) //Bcs me in players_dico.PlayerDIc
-			// {
-			// }
 			if ((int)player.CurrentState != -1) // 1 = 
 			{
 				PlayersCharacter[player.Id].Reset();
 			}
 		}
-		//MyPlayer.Reset();
 	}
 
 	private bool CheckDrawBomb(Player player)
 	{
-		if(player.CardIdDraw == 0 && player.Id == Multiplayer.GetUniqueId())
+		if(player.CardIdDraw == 0 && player.Id == MyId)
 		{
 			return true;
 		}
@@ -395,7 +352,7 @@ public partial class Game : Node2D
 
 	private void PeerPlay(int PeerId)
 	{
-		players[PeerId].SetPlay();	
+		PlayersCharacter[PeerId].Container.SetPlay();	
 	}
 
 	public void SetProbaDie(float proba)
@@ -413,9 +370,9 @@ public partial class Game : Node2D
 		GetTree().ChangeSceneToPacked(MainScene);
 	}
 
-	private void RemovePlayer(long Id)
+	private void RemovePlayer(long PeerId)
 	{
-		players[Id].SetColorDisconnected();// Set to black
+		PlayersCharacter[PeerId].Container.SetColorDisconnected();// Set to black
 	}
 
 	private void PlayCard(int CardId,Godot.Collections.Array<int> CardInfo)
@@ -427,16 +384,24 @@ public partial class Game : Node2D
 		}
 	}
 
-	private void StartCardGame(int IdxNewPosition,long PeerIdFoundBaddie)
+	private void StartCardGame(int IdxNewPosition,long PeerIdFoundBaddie,int NewLove)
 	{
-		DisplayPseudoFoundBaddie.StartAnimationPlayerFoundBaddie(Networking.Instance.PlayersInfo.PlayerDic[PeerIdFoundBaddie].Pseudo,CardPlayArea.ReturnPosition(IdxNewPosition),PlayersCharacter[Multiplayer.GetUniqueId()].SetInCardGame,CardPlayArea.StartCardGame,ShowCardContainer);
-		players[PeerIdFoundBaddie].SetNewLove(-3);
-
-		AddValue Add = (AddValue)AddValuePackedScene.Instantiate();
-		players[PeerIdFoundBaddie].AddChild(Add);
-		Add.Init(3);		
+		DisplayPseudoFoundBaddie.StartAnimationPlayerFoundBaddie(Networking.Instance.PlayersInfo.PlayerDic[PeerIdFoundBaddie].Pseudo,CardPlayArea.ReturnPosition(IdxNewPosition),PlayersCharacter[MyId].SetInCardGame,CardPlayArea.StartCardGame,ShowCardContainer);
+		if(PeerIdFoundBaddie == MyId)
+		{
+			PlayersCharacter[PeerIdFoundBaddie].Container.SetNewLove(-3);
+		}
 
 	}
+
+	public void AddPopupAddValueToPlayer(long PeerId,int Value)
+	{
+		//Issue Why ??
+		AddValue Add = (AddValue)AddValuePackedScene.Instantiate();
+		PlayersCharacter[PeerId].Container.AddChild(Add);
+		Add.Init(Value);
+	}
+
 	private void HideCardContainer()
 	{
 		Hand.HideHand();
